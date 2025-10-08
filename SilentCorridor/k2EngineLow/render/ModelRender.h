@@ -28,7 +28,7 @@ namespace nsK2EngineLow {
 		/// <summary>
 		/// 描画処理。
 		/// </summary>
-		/// <param name="rc">レンダーコンテキスト。</param>
+		/// <param name="rc">描画に使用するRenderContextオブジェクト。</param>
 		void Draw(RenderContext& rc);
 
 		/// <summary>
@@ -56,6 +56,11 @@ namespace nsK2EngineLow {
 		Model& GetModel()
 		{
 			return m_model;
+		}
+
+		Model* GetPModel()
+		{
+			return m_model.GetModel();
 		}
 		
 		/// <summary>
@@ -118,7 +123,7 @@ namespace nsK2EngineLow {
 		void InitAnimation(AnimationClip* animationClips,
 			int numAnimationClips,
 			EnModelUpAxis enModelUpAxis);
-
+		
 	private:
 		AnimationClip* m_animationClips = nullptr;//アニメーションクリップ。
 		Animation m_animation;//アニメーション。

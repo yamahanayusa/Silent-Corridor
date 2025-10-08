@@ -1,5 +1,6 @@
 #include "k2EngineLowPreCompile.h"
 #include "SpriteRender.h"
+#include "RenderingEngine.h"
 
 namespace nsK2EngineLow {
 	void SpriteRender::Init(const char* filePath, const float w, const float h)
@@ -14,5 +15,10 @@ namespace nsK2EngineLow {
 		initData.m_height = h;
 		//Sprite初期化オブジェクトを使用して、Spriteを初期化する。
 		m_sprite.Init(initData);
+	}
+
+	void SpriteRender::Draw(RenderContext& rc)
+	{
+		g_renderingEngine->RegiterSprite(this);
 	}
 }

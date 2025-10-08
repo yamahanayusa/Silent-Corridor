@@ -93,17 +93,28 @@ namespace nsK2EngineLow {
 		/// 描画処理。
 		/// </summary>
 		/// <param name="rc">レンダーコンテキスト。</param>
-		void Draw(RenderContext& rc)
+		void Draw(RenderContext& rc);
+
+		/// <summary>
+		/// スプライトを取得。
+		/// </summary>
+		/// <returns>モデル</returns>
+		Sprite& GetSprite()
 		{
-			m_sprite.Draw(rc);
+			return m_sprite;
 		}
+
+		Sprite* GetPSprite()
+		{
+			return m_sprite.GetSprite();
+		}
+
 	private:
 		Sprite m_sprite;//スプライト。
 		Vector3	m_position;//座標。
 		Quaternion m_rotation = Quaternion::Identity;//回転。
 		Vector3	m_scale = Vector3::One;//大きさ。
 		Vector2	m_pivot = Sprite::DEFAULT_PIVOT;//ピボット。
-
 	};
 }
 
