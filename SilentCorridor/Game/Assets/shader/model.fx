@@ -103,7 +103,7 @@ sampler g_sampler : register(s0); //サンプラステート
 ////////////////////////////////////////////////
 
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
-float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
+float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
 
 /// <summary>
 /// ディレクションライトの計算
@@ -114,7 +114,7 @@ float3 CalcDirectionLig(SPSIn psIn)
     float3 diffuseLig = CalcLambertDiffuse(directionLight.direction, directionLight.color, psIn.normal);
 
     // Phong鏡面反射光を計算する
-    float3 specularLig = CalcPhongSpecular(directionLight.direction, directionLight.color, psIn.worldPos, psIn.normal);
+    float3 specularLig = CalcPhongSpecular(psIn, directionLight.direction, directionLight.color, psIn.worldPos, psIn.normal);
 
     // 拡散反射光 + 鏡面反射光
     float3 lig = diffuseLig + specularLig;
@@ -139,7 +139,7 @@ float3 CalcPointLig(SPSIn psIn)
     float3 diffPoint = CalcLambertDiffuse(ligDir, pointLight.color, psIn.normal);
 
     // Phong鏡面反射光
-    float3 specPoint = CalcPhongSpecular(ligDir, pointLight.color, psIn.worldPos, psIn.normal);
+    float3 specPoint = CalcPhongSpecular(psIn, ligDir, pointLight.color, psIn.worldPos, psIn.normal);
 
     // 距離による減衰 (0 ～ 1)
     float affect = 1.0f - distance / pointLight.range;
@@ -166,7 +166,7 @@ float3 CalcSpotLig(SPSIn psIn)
     float3 diff = CalcLambertDiffuse(ligDir, spotLight.color, psIn.normal);
 
     // Phong鏡面反射
-    float3 spec = CalcPhongSpecular(ligDir, spotLight.color, psIn.worldPos, psIn.normal);
+    float3 spec = CalcPhongSpecular(psIn, ligDir, spotLight.color, psIn.worldPos, psIn.normal);
 
     // 距離減衰 (0～1)
     float affect = saturate(1.0f - distance / spotLight.range);
@@ -333,8 +333,11 @@ float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 norma
 /// <summary>
 /// Phong鏡面反射光を計算する
 /// </summary>
-float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal)
+float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal)
 {
+    // スペキュラマップからスペキュラ反射の強さをサンプリング
+    float specPower = g_specularMap.Sample(g_sampler, psIn.uv);
+    
     // 反射ベクトルを求める
     float3 refVec = reflect(lightDirection, normal);
 
@@ -352,5 +355,5 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
     t = pow(t, 5.0f);
 
     // 鏡面反射光を求める
-    return lightColor * t;
+    return lightColor * t * specPower;
 }

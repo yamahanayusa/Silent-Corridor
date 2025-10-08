@@ -116,6 +116,14 @@ namespace nsK2EngineLow {
 		{
 			return m_textures[texNo].GetHeight();
 		}
+		/// <summary>
+		/// スプライトのポインタを取得。
+		/// </summary>
+		/// <returns>この Sprite オブジェクトへのポインタ。</returns>
+		Sprite* GetSprite()
+		{
+			return this;
+		}
 	private:
 		/// <summary>
 		/// テクスチャを初期化。

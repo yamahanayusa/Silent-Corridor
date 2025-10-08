@@ -1,5 +1,6 @@
 #include "k2EngineLowPreCompile.h"
 #include "ModelRender.h"
+#include "RenderingEngine.h"
 
 namespace nsK2EngineLow {
 	void ModelRender::Init(const char* filePath,
@@ -74,6 +75,6 @@ namespace nsK2EngineLow {
 
 	void ModelRender::Draw(RenderContext& rc)
 	{
-		m_model.Draw(rc);
+		g_renderingEngine->RegisterModel(this);
 	}
 }

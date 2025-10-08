@@ -1,11 +1,13 @@
 #include "k2EngineLowPreCompile.h"
 #include "k2EngineLow.h"
 #include "graphics/Texture.h"
+#include "RenderingEngine.h"
 
 namespace nsK2EngineLow {
 	K2EngineLow* g_engine = nullptr;
 	GameTime* g_gameTime = nullptr;
 	SceneLight* g_sceneLight = nullptr;
+	RenderingEngine* g_renderingEngine = nullptr;
 
 	K2EngineLow::~K2EngineLow()
 	{
@@ -14,6 +16,7 @@ namespace nsK2EngineLow {
 		g_gameTime = nullptr;
 		
 		delete m_graphicsEngine;
+		delete g_renderingEngine;
 		
 		//ゲームオブジェクトマネージャーを削除。
 		GameObjectManager::DeleteInstance();
@@ -42,6 +45,10 @@ namespace nsK2EngineLow {
 			//エフェクトエンジンの初期化。
 			EffectEngine::CreateInstance();
 		}
+
+		g_renderingEngine = new RenderingEngine();
+		g_renderingEngine->Init();
+
 #ifdef K2_DEBUG
 		if (m_graphicsEngine) {
 			m_fpsFont = std::make_unique<Font>();
@@ -98,6 +105,7 @@ namespace nsK2EngineLow {
 		auto& renderContext = g_graphicsEngine->GetRenderContext();
 		// ゲームオブジェクトマネージャーの描画処理を実行。
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+		g_renderingEngine->Execute(renderContext);	// @todo for test
 		
 	}
 

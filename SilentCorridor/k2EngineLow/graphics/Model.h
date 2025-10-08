@@ -175,6 +175,14 @@ namespace nsK2EngineLow {
 		/// </remark>
 		/// <param name="reInitData">再初期化データ。</param>
 		void ReInitMaterials(MaterialReInitData& reInitData);
+		/// <summary>
+		/// モデルのポインタを取得。
+		/// </summary>
+		/// <returns>このオブジェクト自身への Model 型ポインタ。</returns>
+		Model* GetModel()
+		{
+			return this;
+		}
 	private:
 		bool m_isInited = false;						//初期化されている？
 		Matrix m_worldMatrix;							//ワールド行列。

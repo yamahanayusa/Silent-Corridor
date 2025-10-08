@@ -238,6 +238,9 @@
       <Filter>renderer</Filter>
     </ClCompile>
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="Bloom.cpp" />
+    <ClCompile Include="RenderingEngine.cpp" />
+    <ClCompile Include="PostEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -525,6 +528,9 @@
       <Filter>renderer</Filter>
     </ClInclude>
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="Bloom.h" />
+    <ClInclude Include="RenderingEngine.h" />
+    <ClInclude Include="PostEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
