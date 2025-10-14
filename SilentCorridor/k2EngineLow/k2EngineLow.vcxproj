@@ -255,6 +255,7 @@
     <ClCompile Include="AI\PathFinding\Path.cpp" />
     <ClCompile Include="AI\PathFinding\PathFinding.cpp" />
     <ClCompile Include="Bloom.cpp" />
+    <ClCompile Include="camera\CameraCollisionSolver.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="render\FontRender.cpp" />
@@ -334,6 +335,7 @@
     <ClCompile Include="sound\WaveFile.cpp" />
     <ClCompile Include="sound\WaveFileBank.cpp" />
     <ClCompile Include="render\SpriteRender.cpp" />
+    <ClCompile Include="camera\SpringCamera.cpp" />
     <ClCompile Include="tkFile\TkaFile.cpp" />
     <ClCompile Include="tkFile\TkmFile.cpp" />
     <ClCompile Include="tkFile\TknFile.cpp" />
@@ -345,6 +347,7 @@
     <ClInclude Include="AI\PathFinding\Path.h" />
     <ClInclude Include="AI\PathFinding\PathFinding.h" />
     <ClInclude Include="Bloom.h" />
+    <ClInclude Include="camera\CameraCollisionSolver.h" />
     <ClInclude Include="dbg\MyAssert.h" />
     <ClInclude Include="dbg\MyLog.h" />
     <ClInclude Include="PointLight.h" />
@@ -432,6 +435,7 @@
     <ClInclude Include="sound\WaveFile.h" />
     <ClInclude Include="sound\WaveFileBank.h" />
     <ClInclude Include="render\SpriteRender.h" />
+    <ClInclude Include="camera\SpringCamera.h" />
     <ClInclude Include="time\FPSLimitter.h" />
     <ClInclude Include="time\GameTime.h" />
     <ClInclude Include="time\Stopwatch.h" />

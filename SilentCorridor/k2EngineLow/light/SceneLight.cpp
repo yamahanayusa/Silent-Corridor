@@ -4,6 +4,7 @@
 namespace nsK2EngineLow {
 	SceneLight::SceneLight()
 	{
+
 	}
 
 	SceneLight::~SceneLight()
@@ -31,7 +32,7 @@ namespace nsK2EngineLow {
 	void SceneLight::Init()
 	{
 		m_directionLight.SetDirection(Vector3(-1, -1, 1));
-		m_directionLight.SetColor(Vector3(1.5f, 0.5f, 0.5f));
+		m_directionLight.SetColor(Vector3(0.5f, 0.5f, 0.5f));
 		m_directionLight.eyePos = g_camera3D->GetPosition();
 	}
 
