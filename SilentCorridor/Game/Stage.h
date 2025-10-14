@@ -2,12 +2,14 @@
 class Stage : public IGameObject
 {
 public:
-	Stage();
-	~Stage();
+	Stage() {}
+	~Stage() {}
 
-	void Render(RenderContext& rc);
+	bool Start() override;
+	void Render(RenderContext& rc) override;
 
 	ModelRender m_modelRender;
+	ModelRender m_stageCollision;
 	PhysicsStaticObject physicsStaticObject;
 };
 
