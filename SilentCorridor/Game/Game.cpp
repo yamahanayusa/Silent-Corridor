@@ -1,18 +1,24 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "Stage.h"
+#include "Player.h"
+#include "GameCamera.h"
 
 bool Game::Start()
 {
+	// “–‚½‚è”»’è‚Ì‰ÂŽ‹‰»
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+
 	m_stage = NewGO<Stage>(0, "stage");
- 	m_modelRender.Init("Assets/modelData/unityChan.tkm");
+	m_player = NewGO<Player>(0, "player");
+	m_gameCamera = NewGO<GameCamera>(0, "gamecamera");
 	m_modelRender.Update();
 	return true;
 }
 
 void Game::Update()
 {
-	// g_renderingEngine->DisableRaytracing();
+
 }
 
 void Game::Render(RenderContext& rc)

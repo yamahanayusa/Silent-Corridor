@@ -241,6 +241,8 @@
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
     <ClCompile Include="PostEffect.cpp" />
+    <ClCompile Include="camera\CameraCollisionSolver.cpp" />
+    <ClCompile Include="camera\SpringCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -531,6 +533,8 @@
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="RenderingEngine.h" />
     <ClInclude Include="PostEffect.h" />
+    <ClInclude Include="camera\CameraCollisionSolver.h" />
+    <ClInclude Include="camera\SpringCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
