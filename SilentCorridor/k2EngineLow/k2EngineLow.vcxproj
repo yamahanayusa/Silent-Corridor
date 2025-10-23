@@ -336,6 +336,7 @@
     <ClCompile Include="sound\WaveFileBank.cpp" />
     <ClCompile Include="render\SpriteRender.cpp" />
     <ClCompile Include="camera\SpringCamera.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="tkFile\TkaFile.cpp" />
     <ClCompile Include="tkFile\TkmFile.cpp" />
     <ClCompile Include="tkFile\TknFile.cpp" />
@@ -436,6 +437,7 @@
     <ClInclude Include="sound\WaveFileBank.h" />
     <ClInclude Include="render\SpriteRender.h" />
     <ClInclude Include="camera\SpringCamera.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="time\FPSLimitter.h" />
     <ClInclude Include="time\GameTime.h" />
     <ClInclude Include="time\Stopwatch.h" />

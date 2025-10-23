@@ -56,6 +56,9 @@ namespace nsK2EngineLow {
 		}
 #endif
 		g_engine = this;
+
+		//g_sceneLight = new SceneLight;
+
 	}
 	void K2EngineLow::BeginFrame()
 	{

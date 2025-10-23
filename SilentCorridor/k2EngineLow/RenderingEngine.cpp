@@ -17,8 +17,8 @@ namespace nsK2EngineLow {
 		InitMainRenderTarget();                    // mainRTを作る
 		Init2DRenderTarget();                      // UI用RTを作る
 		InitCopyMainRenderTargetToFrameBufferSprite();
-		m_sceneLight.Init();                       // ライト初期化
 		m_postEffect.Init(m_mainRenderTarget);
+		m_sceneLight.Init();                       // ライト初期化
 	}
 
 	void RenderingEngine::Update()
