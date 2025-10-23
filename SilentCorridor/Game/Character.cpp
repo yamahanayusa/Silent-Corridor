@@ -18,8 +18,7 @@ void Character::Move()
 /// </summary>
 void Character::Rotation()
 {
-    if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
-    {
+    if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f){
         m_rotation.SetRotationYFromDirectionXZ(m_moveSpeed);
     }
 }

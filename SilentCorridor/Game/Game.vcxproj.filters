@@ -16,6 +16,8 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Lighter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -28,6 +30,8 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Lighter.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

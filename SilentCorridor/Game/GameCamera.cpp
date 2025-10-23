@@ -29,7 +29,7 @@ void GameCamera::Update()
 	Vector3 target = m_player->GetPosition();
 
 	// ƒvƒŒƒCƒ„‚Ì‘«Œ³‚©‚ç‚¿‚å‚Á‚Æã‚ð’Ž‹“_‚Æ‚·‚é
-	target.y += 80.0f;
+	target.y += 400.0f;
 	target += g_camera3D->GetForward() * 20.0f;
 
 	Vector3 toCameraPosOld = m_toCameraPos;
