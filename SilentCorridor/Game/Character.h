@@ -8,7 +8,10 @@ class Character : public IGameObject
 public:
     Character() {}
     ~Character() {}
-    virtual bool Start() override { return true; }
+    virtual bool Start() override 
+    { 
+        return true; 
+    }
     virtual void Update() override {}
 
     void Move();    // ˆÚ“®ˆ—
