@@ -44,8 +44,8 @@ namespace nsK2EngineLow {
 		//ノンスキンメッシュ用の頂点シェーダーのエントリーポイントを指定する。
 		initData.m_vsEntryPointFunc = "VSMain";
 		//ユーザー拡張の定数バッファーにシ－ンライトを登録
-		initData.m_expandConstantBuffer = g_sceneLight->GetSDirectionLight();
-		initData.m_expandConstantBufferSize = sizeof(SDirectionLight);
+		initData.m_expandConstantBuffer = g_sceneLight->GetLight();
+		initData.m_expandConstantBufferSize = sizeof(Light);
 
 		if (m_animationClips != nullptr) {
 			//スキンメッシュ用の頂点シェーダーのエントリーポイントを指定する。

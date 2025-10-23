@@ -2,6 +2,9 @@
  * @brief	シンプルなモデルシェーダー。
  */
 
+static const int MAX_POINTNUM = 1;
+static const int MAX_SPOTNUM = 1;
+
  ////////////////////////////////////////////////
  // 定数バッファ。
  ////////////////////////////////////////////////
@@ -24,17 +27,21 @@ struct DirectionLight
 struct PointLight
 {
     float3 position; //位置
+    int    use;
     float3 color; //カラー
     float  range; //影響範囲
+    float3 posInView;
 };
 // スポットライト用の構造体
 struct SpotLight
 {
     float3 position; //位置
+    int    use;
     float3 color; //カラー
     float  range; //放射範囲
     float3 direction; //放射方向
     float  angle; //放射角度
+    float3 posInView;
 };
 // リムライト用の構造体
 struct RimLight
@@ -46,8 +53,8 @@ struct RimLight
 cbuffer LightCb : register(b1)
 {
     DirectionLight directionLight;
-    PointLight pointLight;
-    SpotLight spotLight;
+    PointLight pointLight[MAX_POINTNUM];
+    SpotLight spotLight[MAX_SPOTNUM];
     RimLight rimLight;
     float3 ambientLight;
 }
@@ -131,23 +138,27 @@ float3 CalcDirectionLig(SPSIn psIn)
 float3 CalcPointLig(SPSIn psIn)
 {   
     // ライト → サーフェイス方向ベクトルを計算
-    float3 ligDir = pointLight.position - psIn.worldPos;
+    float3 ligDir = psIn.worldPos - pointLight[0].position;
     float distance = length(ligDir);
     ligDir = normalize(ligDir);
 
     // Lambert拡散反射光
-    float3 diffPoint = CalcLambertDiffuse(ligDir, pointLight.color, psIn.normal);
+    float3 diffPoint = CalcLambertDiffuse(ligDir, pointLight[0].color, psIn.normal);
 
     // Phong鏡面反射光
-    float3 specPoint = CalcPhongSpecular(psIn, ligDir, pointLight.color, psIn.worldPos, psIn.normal);
+    float3 specPoint = CalcPhongSpecular(psIn, ligDir, pointLight[0].color, psIn.worldPos, psIn.normal);
 
     // 距離による減衰 (0 ～ 1)
-    float affect = 1.0f - distance / pointLight.range;
-    affect = max(0.0f, affect);
+    float affect = 1.0f - (1.0f / pointLight[0].range) * distance;
+    //affect = max(0.0f, affect);
+    if (affect < 0.0f)
+    {
+        affect = 0.0f;
+    }
     affect = pow(affect, 3.0f); // 減衰を急峻にする
 
     // 拡散反射光と鏡面反射光に減衰を乗算
-    float3 lig = (diffPoint + specPoint) * affect;
+    float3 lig = (diffPoint * affect) + (specPoint * affect);
 
     return lig;
 }
@@ -158,24 +169,24 @@ float3 CalcPointLig(SPSIn psIn)
 float3 CalcSpotLig(SPSIn psIn)
 {
     // サーフェイスに向かうライトベクトル
-    float3 ligDir = spotLight.position - psIn.worldPos;
+    float3 ligDir = spotLight[0].position - psIn.worldPos;
     float distance = length(ligDir);
     ligDir = normalize(ligDir);
 
     // Lambert拡散反射
-    float3 diff = CalcLambertDiffuse(ligDir, spotLight.color, psIn.normal);
+    float3 diff = CalcLambertDiffuse(ligDir, spotLight[0].color, psIn.normal);
 
     // Phong鏡面反射
-    float3 spec = CalcPhongSpecular(psIn, ligDir, spotLight.color, psIn.worldPos, psIn.normal);
+    float3 spec = CalcPhongSpecular(psIn, ligDir, spotLight[0].color, psIn.worldPos, psIn.normal);
 
     // 距離減衰 (0～1)
-    float affect = saturate(1.0f - distance / spotLight.range);
+    float affect = saturate(1.0f - distance / spotLight[0].range);
     affect = pow(affect, 3.0f); // 急峻に減衰
 
     // スポット角度による減衰
-    float3 spotDir = normalize(spotLight.direction);
+    float3 spotDir = normalize(spotLight[0].direction);
     float cosAngle = dot(ligDir, spotDir); // cosθ
-    float cosLimit = cos(spotLight.angle); // 角度をラジアン指定にしておく
+    float cosLimit = cos(spotLight[0].angle); // 角度をラジアン指定にしておく
 
     // cosθがcosLimitより小さければ外側 → 影響ゼロ
     float spotAffect = smoothstep(cosLimit, 1.0f, cosAngle);
@@ -299,7 +310,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 {
     psIn.normal = CalcNormalMap(psIn);
     
-    float3 lig = CalcDirectionLig(psIn) + CalcPointLig(psIn) + CalcSpotLig(psIn);
+    float3 lig = CalcDirectionLig(psIn) + CalcPointLig(psIn)/* + CalcSpotLig(psIn)*/;
     
     // リムライトを加算
     lig += CalcRimLig(psIn);

@@ -243,6 +243,7 @@
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="camera\CameraCollisionSolver.cpp" />
     <ClCompile Include="camera\SpringCamera.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -535,6 +536,7 @@
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="camera\CameraCollisionSolver.h" />
     <ClInclude Include="camera\SpringCamera.h" />
+    <ClInclude Include="SpotLight.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

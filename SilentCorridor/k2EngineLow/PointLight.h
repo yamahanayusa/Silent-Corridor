@@ -46,6 +46,14 @@ namespace nsK2EngineLow {
             m_pointLig->SetRange(range);
         }
 
+        /// <summary>
+        /// 更新
+        /// </summary>
+        void Update()
+        {
+            m_pointLig->Update();
+        }
+
     private:
 
         SPointLight* m_pointLig = nullptr;    //ポイントライト
