@@ -8,7 +8,7 @@ namespace
 
 bool Player::Start()
 {
-    m_position = Vector3(1000.0f, 0.0f, 1000.0f);
+    m_position = Vector3(2000.0f, 0.0f, 2000.0f);
     // キャラクターコントローラー初期化
     m_characterController.Init(25.0f, 75.0f, m_position);
 
