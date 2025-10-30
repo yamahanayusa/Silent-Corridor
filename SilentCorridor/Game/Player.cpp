@@ -3,7 +3,7 @@
 
 namespace
 {
-    static constexpr float MOVE_FORCE = 700.0f;     // 左スティック入力による移動
+    static constexpr float MOVE_FORCE = 2000.0f;     // 左スティック入力による移動
 }
 
 bool Player::Start()

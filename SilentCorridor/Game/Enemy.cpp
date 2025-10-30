@@ -26,14 +26,13 @@ bool Enemy::Start()
     srand(time(nullptr));
 
     // アニメーションの読み込み
-    m_animationClips[enAnimationClip_Walk].Load("Assets/modelData/enemy/Enemy_Walk.tka");
+    m_animationClips[enAnimationClip_Walk].Load("Assets/animData/Enemy_Walk.tka");
     m_animationClips[enAnimationClip_Walk].SetLoopFlag(true);
-    m_animationClips[enAnimationClip_Idle].Load("Assets/modelData/enemy/Enemy_Walk.tka");
+    m_animationClips[enAnimationClip_Idle].Load("Assets/animData/Enemy_Idle.tka");
     m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
 
     // モデル読み込み
     m_modelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisZ);
-    m_modelRender.SetScale(Vector3(10.0f, 10.0f, 10.0f));
 
     // ステージからナビメッシュを取得
     m_stage = FindGO<Stage>("stage");
@@ -49,16 +48,12 @@ bool Enemy::Start()
     }
 
     m_modelRender.SetPosition(GetPosition());
-    m_characterController.Init(25.0f, 75.0f, GetPosition());
+    m_characterController.Init(80.0f, 300.0f, GetPosition());
 
     // 初回経路探索
     if (m_navMesh && !m_patrolPoints.empty()) {
         FindNextPatrolTarget();
     }
-
-    // 初期化
-    m_isMoving = false;
-    SetMoveSpeed(Vector3::Zero);
 
     return true;
 }
@@ -75,13 +70,32 @@ void Enemy::Update()
     Vector3 oldPosition = GetPosition();
 
     // Character::Move()を実行
-    Move();
+    if (m_state == enAnimationClip_Walk) {
+        Move();
+        // GetPosition()とoldPositionがほぼ等しいかチェック
+        if (IsEquals(GetPosition(), oldPosition)) {
+            // 動けていない場合：次の目標を再探索しm_isMovingをfalseにする
+            if (m_isMoving) {
+                FindNextPatrolTarget(); // 動けないなら別の経路を探す
+            }
+            m_isMoving = false;
+            SetMoveSpeed(Vector3::Zero);
+        }
+        else {
+            // 正常に動けている場合
+            m_isMoving = true;
+        }
+    }
+
+    // 待機状態の管理と遷移
+    SetAnimationByState();
 
     // 回転処理
-    //Rotation();
+    Rotation();
 
     // モデルを更新
     m_modelRender.SetPosition(GetPosition());
+    m_modelRender.SetRotation(GetRotation());
     m_modelRender.Update();
 }
 
@@ -90,28 +104,20 @@ void Enemy::Update()
 /// </summary>
 void Enemy::InitPatrolPoints()
 {
-    m_patrolPoints.push_back(Vector3(-75.0f, 0.0f, 2438.0f));
-    m_patrolPoints.push_back(Vector3(-15.0f, 0.0f, 7358.0f));
-    m_patrolPoints.push_back(Vector3(5829.0f, 0.0f, 7358.0f));
-    m_patrolPoints.push_back(Vector3(5829.0f, 0.0f, 10255.0f));
-    m_patrolPoints.push_back(Vector3(7823.0f, 0.0f, 10255.0f));
-    m_patrolPoints.push_back(Vector3(12804.0f, 0.0f, 10255.0f));
-    m_patrolPoints.push_back(Vector3(7878.0f, 0.0f, 8390.0f));
-    m_patrolPoints.push_back(Vector3(12719.0f, 0.0f, 8390.0f));
-    m_patrolPoints.push_back(Vector3(5857.0f, 0.0f, 6366.0f));
-    m_patrolPoints.push_back(Vector3(12722.0f, 0.0f, 6366.0f));
-    m_patrolPoints.push_back(Vector3(14688.0f, 0.0f, 5375.0f));
-    m_patrolPoints.push_back(Vector3(2780.0f, 0.0f, 1437.0f));
-    m_patrolPoints.push_back(Vector3(7859.0f, 0.0f, -1555.0f));
-    m_patrolPoints.push_back(Vector3(8050.0f, 0.0f, -4843.0f));
-    m_patrolPoints.push_back(Vector3(7830.0f, 0.0f, -7473.0f));
-    m_patrolPoints.push_back(Vector3(8732.0f, 0.0f, -7473.0f));
-    m_patrolPoints.push_back(Vector3(8816.0f, 0.0f, -9389.0f));
-    m_patrolPoints.push_back(Vector3(7748.0f, 0.0f, -13292.0f));
-    m_patrolPoints.push_back(Vector3(917.0f, 0.0f, -13317.0f));
-    m_patrolPoints.push_back(Vector3(917.0f, 0.0f, -10400.0f));
-    m_patrolPoints.push_back(Vector3(-2031.0f, 0.0f, -7350.0f));
-    m_patrolPoints.push_back(Vector3(-2031.0f, 0.0f, -2510.0f));
+    m_patrolPoints.push_back(Vector3(3007.0f, 0.0f, -1875.0f));
+    m_patrolPoints.push_back(Vector3(-140.0f, 0.0f, -3034.0f));
+    m_patrolPoints.push_back(Vector3(-2188.0f, 0.0f, 2227.0f));
+    m_patrolPoints.push_back(Vector3(-2223.0f, 0.0f, 9979.0f));
+    m_patrolPoints.push_back(Vector3(7640.0f, 0.0f, -1933.0f));
+    m_patrolPoints.push_back(Vector3(8701.0f, 0.0f, 8817.0f));
+    m_patrolPoints.push_back(Vector3(7686.0f, 0.0f, 12827.0f));
+    m_patrolPoints.push_back(Vector3(760.0f, 0.0f, 12904.0f));
+    m_patrolPoints.push_back(Vector3(-2132.0f, 0.0f, 9946.0f));
+    m_patrolPoints.push_back(Vector3(-208.0f, 0.0f, -7781.0f));
+    m_patrolPoints.push_back(Vector3(5919.0f, 0.0f, -7806.0f));
+    m_patrolPoints.push_back(Vector3(12712.0f, 0.0f, -5883.0f));
+    m_patrolPoints.push_back(Vector3(7739.0f, 0.0f, -10599.0f));
+    m_patrolPoints.push_back(Vector3(12676.0f, 0.0f, -8754.0f));
 }
 
 /// <summary>
@@ -129,9 +135,10 @@ void Enemy::UpdateMove()
         }
     }
 
-    // NavMeshがない、または経路ポイントがない場合は移動しない
-    if (!m_navMesh || m_patrolPoints.empty()) {
+    // NavMeshがない、または経路ポイントがない、待機アニメーションの場合は移動しない
+    if (!m_navMesh || m_patrolPoints.empty() || m_state == enAnimationClip_Idle) {
         m_isMoving = false;
+        SetMoveSpeed(Vector3::Zero);
         return;
     }
 
@@ -154,7 +161,9 @@ void Enemy::UpdateMove()
 
      // NavMeshが算出した移動ベクトルを計算
      navMeshMoveVector = GetPosition() - oldPosition;
-     navMeshMoveVector *= 100;
+     // 敵のスピード
+     navMeshMoveVector *= m_speed;
+
      // キャラコンで使用するm_moveSpeedを設定
      SetMoveSpeed(navMeshMoveVector);
 
@@ -162,7 +171,11 @@ void Enemy::UpdateMove()
     if (isEnd) {
         SetMoveSpeed(Vector3::Zero);
         m_isMoving = false;
-        FindNextPatrolTarget(); // 次の目標探索関数を呼び出す
+
+        // 目標に到達すると待機状態に
+        m_waitTimer = 0.0f;
+        m_state = enAnimationClip_Idle;
+        //FindNextPatrolTarget(); // 次の目標探索関数を呼び出す
     }
 
     SetPosition(oldPosition);
@@ -199,22 +212,42 @@ void Enemy::FindNextPatrolTarget()
         GetPosition(), // 新しい始点
         m_targetPos, // 新しい目的地
         PhysicsWorld::GetInstance(),
-        25.0f,
-        75.0f
+        80.0f,
+        300.0f
     );
     m_path.Build();
 }
 
 /// <summary>
-/// アニメーション
+/// アニメーションの設定
 /// </summary>
-void Enemy::UpdateAnimation()
+void Enemy::SetAnimationByState()
 {
-    if (m_isMoving) {
-        m_modelRender.PlayAnimation(enAnimationClip_Walk);
-    }
-    else {
+    // 状態が待機の場合
+    if (m_state == enAnimationClip_Idle) {
+        // アニメーション設定 (待機アニメーションを再生)
         m_modelRender.PlayAnimation(enAnimationClip_Idle);
+
+        // 待機時間の更新と遷移判定
+        const float deltaTime = g_gameTime->GetFrameDeltaTime();
+        m_waitTimer += deltaTime;
+
+        if (m_waitTimer >= m_waitDuration) {
+            // 待機時間が終了したら次の目標を探索し移動状態へ
+            FindNextPatrolTarget();
+            m_state = enAnimationClip_Walk; // 移動状態へ遷移
+        }
+    }
+    // 状態が移動の場合
+    else if (m_state == enAnimationClip_Walk) {
+        // m_isMoving に基づいてアニメーションを切り替え
+        if (m_isMoving) {
+            m_modelRender.PlayAnimation(enAnimationClip_Walk);
+        }
+        else {
+            // 壁にぶつかっているなどで動けていないが、まだ目標に向かおうとしている状態
+            m_modelRender.PlayAnimation(enAnimationClip_Idle);
+        }
     }
 }
 
