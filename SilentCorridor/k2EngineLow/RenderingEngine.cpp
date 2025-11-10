@@ -114,6 +114,7 @@ namespace nsK2EngineLow {
 
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
+		Update();
 		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
 		rc.ClearRenderTargetView(m_mainRenderTarget);
 		for (auto model : m_registerModels)

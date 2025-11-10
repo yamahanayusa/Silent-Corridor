@@ -18,7 +18,7 @@ private:
     void ApplyToLight(); // ライトに反映
 
 private:
-    SPointLight* m_pointLight = nullptr; // ポイントライト本体
+    PointLight* m_pointLight = nullptr; // ポイントライト本体
     SceneLight* m_sceneLight = nullptr;
     Player* m_player = nullptr;
 
@@ -28,8 +28,8 @@ private:
     Vector3 m_flickerColor = Vector3::Zero; // 揺らぎの色
     Vector3 m_flickerOffset = Vector3::Zero; // ゆらぎで動かす位置
 
-    float m_range = 2000.0f; // 光の届く範囲
-    float m_flicker = 1.0f; // 明るさの揺らぎ
-    float m_flickerSpeed = 15.0f; // 揺らぎの速さ
-    float m_flickerStrength = 0.3f; //揺らぎの強さ
+    float m_range = 500.0f; // 光の届く範囲
+    float m_flicker = 1.5f; // 明るさの揺らぎ
+    float m_flickerSpeed = 20.0f; // 揺らぎの速さ
+    float m_flickerStrength = 0.5f; //揺らぎの強さ
 };

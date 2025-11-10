@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Lighter.h"
-#include "Player.h"
+#include "Character/Player.h"
 
 /// <summary>
 /// 初期化
@@ -9,16 +9,14 @@
 bool Lighter::Start()
 {
     // 新しいポイントライトを登録
-    m_pointLight = g_sceneLight->NewPointLight();
+    m_pointLight = new PointLight();
+
     if (m_pointLight == nullptr) {
         return false;
     }
-
     // 初期設定
     m_colorBase = Vector3(1.0f, 0.7f, 0.3f);
-    m_pointLight->SetColor(m_colorBase);
-    m_pointLight->SetRange(m_range);
-    m_pointLight->Use();
+    m_pointLight->Init(Vector3::Zero, m_colorBase, m_range);
 
     return true;
 }

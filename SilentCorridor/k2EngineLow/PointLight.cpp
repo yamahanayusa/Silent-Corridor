@@ -2,12 +2,12 @@
 #include "PointLight.h"
 
 namespace nsK2EngineLow {
-	nsK2EngineLow::PointLight::PointLight()
+	PointLight::PointLight()
 	{
 		m_pointLig = g_sceneLight->NewPointLight();
 	}
 
-	nsK2EngineLow::PointLight::~PointLight()
+	PointLight::~PointLight()
 	{
 
 	}
