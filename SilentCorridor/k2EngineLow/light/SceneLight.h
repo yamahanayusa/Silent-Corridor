@@ -3,8 +3,8 @@
 namespace nsK2EngineLow
 {
 	namespace {
-		const int MAX_POINT_LIGHT = 1;
-		const int MAX_SPOT_LIGHT = 1;
+		const int MAX_POINT_LIGHT = 32;
+		const int MAX_SPOT_LIGHT = 32;
 	}
 
 	/// <summary>
@@ -175,7 +175,7 @@ namespace nsK2EngineLow
 		int m_numSpotLight = 0; // スポットライトの使用数
 	};
 
-	class SceneLight :public IGameObject
+	class SceneLight
 	{
 	public:
 		SceneLight();

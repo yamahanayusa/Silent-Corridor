@@ -2,9 +2,10 @@
 #include "Enemy.h"
 #include "Stage.h"
 #include "time.h"
+#include "Player.h"
 
 namespace {
-    const float GROUND_Y = 0.0f;
+    const float DETECTION_RANGE = 2000.0f; // プレイヤー発見距離
 
     // ほぼ等しいかを判定するための関数
     bool IsEquals(const Vector3& a, const Vector3& b, const float value = 0.001f)
@@ -30,6 +31,8 @@ bool Enemy::Start()
     m_animationClips[enAnimationClip_Walk].SetLoopFlag(true);
     m_animationClips[enAnimationClip_Idle].Load("Assets/animData/Enemy_Idle.tka");
     m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
+    m_animationClips[enAnimationClip_Chase].Load("Assets/animData/Enemy_Run.tka");
+    m_animationClips[enAnimationClip_Chase].SetLoopFlag(true);
 
     // モデル読み込み
     m_modelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisZ);
@@ -55,6 +58,9 @@ bool Enemy::Start()
         FindNextPatrolTarget();
     }
 
+    // 初期設定
+    m_logicState = enEnemyState_Walk;
+
     return true;
 }
 
@@ -63,6 +69,24 @@ bool Enemy::Start()
 /// </summary>
 void Enemy::Update()
 {
+    const float deltaTime = g_gameTime->GetFrameDeltaTime();
+
+    // プレイヤーポインタの初期化
+    if (m_player == nullptr) {
+        m_player = FindGO<Player>("player");
+    }
+
+    // 追跡ロジックの実行と状態遷移チェック
+    if (m_logicState == enEnemyState_Chase) {
+        UpdateChase();
+    }
+    // 待機中でなければプレイヤー発見チェックを行う
+    else if (m_logicState != enEnemyState_Idle) {
+        if (CheckPlayerDetection()) {
+            m_logicState = enEnemyState_Chase; // 追跡状態へ
+        }
+    }
+
     // 移動ベクトル計算と再探索判定
     UpdateMove();
 
@@ -70,7 +94,7 @@ void Enemy::Update()
     Vector3 oldPosition = GetPosition();
 
     // Character::Move()を実行
-    if (m_state == enAnimationClip_Walk) {
+    if (m_logicState == enEnemyState_Walk || m_logicState == enEnemyState_Chase) {
         Move();
         // GetPosition()とoldPositionがほぼ等しいかチェック
         if (IsEquals(GetPosition(), oldPosition)) {
@@ -85,6 +109,10 @@ void Enemy::Update()
             // 正常に動けている場合
             m_isMoving = true;
         }
+    }
+    else if (m_logicState == enEnemyState_Idle) {
+        // 待機中は移動しない
+        SetMoveSpeed(Vector3::Zero);
     }
 
     // 待機状態の管理と遷移
@@ -172,13 +200,71 @@ void Enemy::UpdateMove()
         SetMoveSpeed(Vector3::Zero);
         m_isMoving = false;
 
-        // 目標に到達すると待機状態に
-        m_waitTimer = 0.0f;
-        m_state = enAnimationClip_Idle;
-        //FindNextPatrolTarget(); // 次の目標探索関数を呼び出す
+        if (m_logicState == enEnemyState_Chase) {
+
+        }
+        else if (m_logicState == enEnemyState_Walk){
+            // 目標に到達すると待機状態に
+            m_waitTimer = 0.0f;
+            m_state = enAnimationClip_Idle;
+        }
     }
 
     SetPosition(oldPosition);
+}
+
+void Enemy::UpdateChase()
+{
+    const float deltaTime = g_gameTime->GetFrameDeltaTime();
+
+    if (m_player == nullptr) {
+        // プレイヤーがいなければ即座に徘徊に戻る
+        m_logicState = enEnemyState_Walk;
+        FindNextPatrolTarget();
+        return;
+    }
+
+    // 毎フレーム、プレイヤーを目標として経路を再探索
+    m_targetPos = m_player->GetPosition();
+
+    m_pathFinder.Execute(
+        m_path, *m_navMesh, GetPosition(), m_targetPos,
+        PhysicsWorld::GetInstance(), 80.0f, 300.0f
+    );
+    m_path.Build();
+
+
+    // 追跡タイマーの管理
+    // 追跡中も CheckPlayerDetection() を使用して、プレイヤーが「発見範囲内」にいるか確認
+    if (CheckPlayerDetection()) {
+        m_lostTimer = m_lostDuration; // 発見状態を維持できればタイマーをリセット
+    }
+    else {
+        m_lostTimer -= deltaTime; // 発見範囲外に出たらタイマーを減らす
+    }
+
+    // m_lostDuration 秒経過したら徘徊に戻る
+    if (m_lostTimer <= 0.0f) {
+        m_logicState = enEnemyState_Walk; // 徘徊状態へ遷移
+        FindNextPatrolTarget(); // 次のウェイポイントを探す
+    }
+}
+
+bool Enemy::CheckPlayerDetection()
+{
+    if (m_player == nullptr) {
+        return false;
+    }
+
+    Vector3 enemyToPlayer = m_player->GetPosition() - GetPosition();
+    float distSq = enemyToPlayer.LengthSq();
+
+    // 距離判定: 設定された発見距離の2乗と比較
+    if (distSq < DETECTION_RANGE * DETECTION_RANGE) {
+        return true;
+    }
+
+    return false;
 }
 
 /// <summary>
@@ -224,7 +310,7 @@ void Enemy::FindNextPatrolTarget()
 void Enemy::SetAnimationByState()
 {
     // 状態が待機の場合
-    if (m_state == enAnimationClip_Idle) {
+    if (m_logicState == enEnemyState_Idle) {
         // アニメーション設定 (待機アニメーションを再生)
         m_modelRender.PlayAnimation(enAnimationClip_Idle);
 
@@ -235,11 +321,11 @@ void Enemy::SetAnimationByState()
         if (m_waitTimer >= m_waitDuration) {
             // 待機時間が終了したら次の目標を探索し移動状態へ
             FindNextPatrolTarget();
-            m_state = enAnimationClip_Walk; // 移動状態へ遷移
+            m_logicState = enAnimationClip_Walk; // 移動状態へ遷移
         }
     }
     // 状態が移動の場合
-    else if (m_state == enAnimationClip_Walk) {
+    else if (m_logicState == enAnimationClip_Walk || m_logicState == enEnemyState_Chase) {
         // m_isMoving に基づいてアニメーションを切り替え
         if (m_isMoving) {
             m_modelRender.PlayAnimation(enAnimationClip_Walk);
