@@ -19,7 +19,6 @@ private:
 
 private:
     PointLight* m_pointLight = nullptr; // ポイントライト本体
-    SceneLight* m_sceneLight = nullptr;
     Player* m_player = nullptr;
 
     Vector3 m_offset = { 0.0f, 80.0f, 50.0f }; // プレイヤーの手元オフセット

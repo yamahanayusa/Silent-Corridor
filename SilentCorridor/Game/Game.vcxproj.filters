@@ -4,6 +4,12 @@
     <Filter Include="system">
       <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{1f8092ad-b914-4cee-8f5a-1b044c96a1f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Character">
+      <UniqueIdentifier>{0ef83011-8a37-427b-8f8c-d349454422db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -13,11 +19,34 @@
     </ClCompile>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Stage.cpp" />
-    <ClCompile Include="Character.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameCamera.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Lighter.cpp" />
+    <ClCompile Include="Character\Character.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\Enemy.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\Player.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\Lighter.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\KeyItem.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\Inventory.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\FlashBattery.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\Item.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\FlashTrigger.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -27,11 +56,37 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stage.h" />
-    <ClInclude Include="Character.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="GameCamera.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Lighter.h" />
+    <ClInclude Include="Item\IItem.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Character.h">
+      <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Enemy.h">
+      <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Player.h">
+      <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\Lighter.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\KeyItem.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Inventory.h">
+      <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\FlashBattery.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\Item.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\FlashTrigger.h">
+      <Filter>Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
