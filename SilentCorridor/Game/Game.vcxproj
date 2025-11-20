@@ -225,9 +225,14 @@
   <ItemGroup>
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Character\Enemy.cpp" />
+    <ClCompile Include="Item\FlashBattery.cpp" />
+    <ClCompile Include="Item\FlashTrigger.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="Character\Inventory.cpp" />
+    <ClCompile Include="Item\Item.cpp" />
     <ClCompile Include="Item\Lighter.cpp" />
+    <ClCompile Include="Item\KeyItem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Stage.cpp" />
@@ -241,11 +246,16 @@
   <ItemGroup>
     <ClInclude Include="Character\Character.h" />
     <ClInclude Include="Character\Enemy.h" />
+    <ClInclude Include="Item\FlashBattery.h" />
+    <ClInclude Include="Item\FlashTrigger.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Character\Inventory.h" />
+    <ClInclude Include="Item\Item.h" />
     <ClInclude Include="Item\IItem.h" />
     <ClInclude Include="Item\Lighter.h" />
     <ClInclude Include="Character\Player.h" />
+    <ClInclude Include="Item\KeyItem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
