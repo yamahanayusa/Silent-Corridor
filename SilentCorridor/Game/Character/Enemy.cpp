@@ -6,6 +6,8 @@
 
 namespace {
     const float DETECTION_RANGE = 2000.0f; // プレイヤー発見距離
+    const float WALK_SPEED = 20.0f; // 徘徊速度
+    const float CHASE_SPEED = 35.0f; // 追跡速度
 
     // ほぼ等しいかを判定するための関数
     bool IsEquals(const Vector3& a, const Vector3& b, const float value = 0.001f)
@@ -33,9 +35,11 @@ bool Enemy::Start()
     m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
     m_animationClips[enAnimationClip_Chase].Load("Assets/animData/Enemy_Run.tka");
     m_animationClips[enAnimationClip_Chase].SetLoopFlag(true);
+    m_animationClips[enAnimationClip_Stun].Load("Assets/animData/Enemy_Stun.tka");
+    m_animationClips[enAnimationClip_Stun].SetLoopFlag(false);
 
     // モデル読み込み
-    m_modelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisZ);
+    m_modelRender.Init("Assets/modelData/enemy/Enemy.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisZ);
 
     // ステージからナビメッシュを取得
     m_stage = FindGO<Stage>("stage");
@@ -71,6 +75,25 @@ void Enemy::Update()
 {
     const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
+    if (m_logicState == enEnemyState_Stun) {
+        m_stunTimer -= deltaTime;
+
+        if (m_stunTimer <= 0.0f) {
+            // スタン終了、徘徊状態に戻る
+            m_logicState = enEnemyState_Walk;
+            m_speed = WALK_SPEED;
+            FindNextPatrolTarget(); // 次の目標を探す
+        }
+
+        // スタン中は他の全てのロジックをスキップ
+        SetAnimationByState(); // アニメーションだけは更新する
+        Rotation();
+        m_modelRender.SetPosition(GetPosition());
+        m_modelRender.SetRotation(GetRotation());
+        m_modelRender.Update();
+        return; // これ以降の処理は全てスキップ
+    }
+
     // プレイヤーポインタの初期化
     if (m_player == nullptr) {
         m_player = FindGO<Player>("player");
@@ -80,10 +103,12 @@ void Enemy::Update()
     if (m_logicState == enEnemyState_Chase) {
         UpdateChase();
     }
+
     // 待機中でなければプレイヤー発見チェックを行う
     else if (m_logicState != enEnemyState_Idle) {
         if (CheckPlayerDetection()) {
             m_logicState = enEnemyState_Chase; // 追跡状態へ
+            m_speed = CHASE_SPEED;
         }
     }
 
@@ -217,9 +242,14 @@ void Enemy::UpdateChase()
 {
     const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
+    // 追跡中はスピードを上げる
+    m_speed = CHASE_SPEED;
+
+
     if (m_player == nullptr) {
         // プレイヤーがいなければ即座に徘徊に戻る
         m_logicState = enEnemyState_Walk;
+        m_speed = WALK_SPEED;
         FindNextPatrolTarget();
         return;
     }
@@ -228,8 +258,13 @@ void Enemy::UpdateChase()
     m_targetPos = m_player->GetPosition();
 
     m_pathFinder.Execute(
-        m_path, *m_navMesh, GetPosition(), m_targetPos,
-        PhysicsWorld::GetInstance(), 80.0f, 300.0f
+        m_path, 
+        *m_navMesh, 
+        GetPosition(), 
+        m_targetPos,
+        PhysicsWorld::GetInstance(), 
+        80.0f, 
+        300.0f
     );
     m_path.Build();
 
@@ -246,6 +281,7 @@ void Enemy::UpdateChase()
     // m_lostDuration 秒経過したら徘徊に戻る
     if (m_lostTimer <= 0.0f) {
         m_logicState = enEnemyState_Walk; // 徘徊状態へ遷移
+        m_speed = WALK_SPEED;
         FindNextPatrolTarget(); // 次のウェイポイントを探す
     }
 }
@@ -305,10 +341,60 @@ void Enemy::FindNextPatrolTarget()
 }
 
 /// <summary>
+/// 敵のスタン効果の付与
+/// </summary>
+/// <param name="duration"></param>
+void Enemy::SetStun(float duration)
+{
+    // スタン時間の設定、ステートをスタンに遷移
+    m_stunTimer = duration;
+    m_logicState = enEnemyState_Stun;
+
+    // スタン状態は移動速度を０にする
+    SetMoveSpeed(Vector3::Zero);
+    m_isMoving = false;
+
+    // アニメーションの切り替え
+    m_modelRender.PlayAnimation(enAnimationClip_Stun);
+
+    // 追跡中の場合はロストタイマーリセット
+    m_lostTimer = 0.0f;
+}
+
+/// <summary>
 /// アニメーションの設定
 /// </summary>
 void Enemy::SetAnimationByState()
 {
+    // スタン状態
+    if (m_logicState == enEnemyState_Stun) {
+        m_modelRender.PlayAnimation(enAnimationClip_Stun);
+        return;
+    }
+
+    // 状態が追跡中の場合
+    if (m_logicState == enEnemyState_Chase) {
+        // m_isMoving に基づいてアニメーションを切り替え
+        if (m_isMoving) {
+            m_modelRender.PlayAnimation(enAnimationClip_Chase);
+        }
+        else {
+            // 壁にぶつかっているなどで動けていないが、まだ目標に向かおうとしている状態
+            m_modelRender.PlayAnimation(enAnimationClip_Idle);
+        }
+    }
+
+    // 状態が徘徊しているとき
+    if (m_logicState == enEnemyState_Walk) {
+        if (m_isMoving) {
+            m_modelRender.PlayAnimation(enAnimationClip_Walk);
+        }
+        else {
+            // 動けていないとき待機アニメーションを再生する
+            m_modelRender.PlayAnimation(enAnimationClip_Idle);
+        }
+    }
+
     // 状態が待機の場合
     if (m_logicState == enEnemyState_Idle) {
         // アニメーション設定 (待機アニメーションを再生)
@@ -322,17 +408,6 @@ void Enemy::SetAnimationByState()
             // 待機時間が終了したら次の目標を探索し移動状態へ
             FindNextPatrolTarget();
             m_logicState = enAnimationClip_Walk; // 移動状態へ遷移
-        }
-    }
-    // 状態が移動の場合
-    else if (m_logicState == enAnimationClip_Walk || m_logicState == enEnemyState_Chase) {
-        // m_isMoving に基づいてアニメーションを切り替え
-        if (m_isMoving) {
-            m_modelRender.PlayAnimation(enAnimationClip_Walk);
-        }
-        else {
-            // 壁にぶつかっているなどで動けていないが、まだ目標に向かおうとしている状態
-            m_modelRender.PlayAnimation(enAnimationClip_Idle);
         }
     }
 }
