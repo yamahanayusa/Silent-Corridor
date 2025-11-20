@@ -50,6 +50,11 @@ namespace nsK2EngineLow {
 		{
 			return m_instance;
 		}
+
+		// 検索用メソッド
+		template<typename T>
+		std::vector<T*>FindAll();
+
 	public:
 		/// <summary>
 		/// 更新処理を実行
@@ -240,6 +245,33 @@ namespace nsK2EngineLow {
 	static inline void DeleteGO(IGameObject* go)
 	{
 		GameObjectManager::GetInstance()->DeleteGameObject(go);
+	}
+
+	/// <summary>
+	/// オブジェクトを検索したい際に使用(IGameObjectを継承してないと使用不可)
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <returns></returns>
+	template<typename T>
+	std::vector<T*> GameObjectManager::FindAll()
+	{
+		std::vector<T*> results;
+
+		// m_gameObjectListArrayを構成するリスト群を全て走査
+		for (auto& goList : m_gameObjectListArray) {
+			// 各リスト内のIGameObject*を全て走査
+			for (IGameObject* go : goList) {
+
+				// T型に安全にキャストできるか試みる
+				T* specificType = dynamic_cast<T*>(go);
+
+				// キャストに成功したら結果リストに追加
+				if (specificType != nullptr) {
+					results.push_back(specificType);
+				}
+			}
+		}
+		return results;
 	}
 }
 

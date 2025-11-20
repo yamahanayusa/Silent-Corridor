@@ -193,24 +193,24 @@ float3 CalcPointLig(SPSIn psIn, PointLight pointLig)
 float3 CalcSpotLig(SPSIn psIn, SpotLight spotLight)
 {
     // サーフェイスに向かうライトベクトル
-    float3 ligDir = m_spotLight[0].position - psIn.worldPos;
+    float3 ligDir = spotLight.position - psIn.worldPos;
     float distance = length(ligDir);
     ligDir = normalize(ligDir);
 
     // Lambert拡散反射
-    float3 diff = CalcLambertDiffuse(ligDir, m_spotLight[0].color, psIn.normal);
+    float3 diff = CalcLambertDiffuse(ligDir, spotLight.color, psIn.normal);
 
     // Phong鏡面反射
-    float3 spec = CalcPhongSpecular(psIn, ligDir, m_spotLight[0].color, psIn.worldPos, psIn.normal);
+    float3 spec = CalcPhongSpecular(psIn, ligDir, spotLight.color, psIn.worldPos, psIn.normal);
 
     // 距離減衰 (0～1)
-    float affect = saturate(1.0f - distance / m_spotLight[0].range);
+    float affect = saturate(1.0f - distance / spotLight.range);
     affect = pow(affect, 3.0f); // 急峻に減衰
 
     // スポット角度による減衰
-    float3 spotDir = normalize(m_spotLight[0].direction);
+    float3 spotDir = normalize(spotLight.direction);
     float cosAngle = dot(ligDir, spotDir); // cosθ
-    float cosLimit = cos(m_spotLight[0].angle); // 角度をラジアン指定にしておく
+    float cosLimit = cos(spotLight.angle); // 角度をラジアン指定にしておく
 
     // cosθがcosLimitより小さければ外側 → 影響ゼロ
     float spotAffect = smoothstep(cosLimit, 1.0f, cosAngle);
