@@ -193,30 +193,43 @@ float3 CalcPointLig(SPSIn psIn, PointLight pointLig)
 float3 CalcSpotLig(SPSIn psIn, SpotLight spotLight)
 {
     // サーフェイスに向かうライトベクトル
-    float3 ligDir = spotLight.position - psIn.worldPos;
-    float distance = length(ligDir);
+    float3 ligDir = psIn.worldPos - spotLight.position;
     ligDir = normalize(ligDir);
-
+    
     // Lambert拡散反射
     float3 diff = CalcLambertDiffuse(ligDir, spotLight.color, psIn.normal);
-
     // Phong鏡面反射
     float3 spec = CalcPhongSpecular(psIn, ligDir, spotLight.color, psIn.worldPos, psIn.normal);
 
+    float3 distance = length(psIn.worldPos - spotLight.position);
+
     // 距離減衰 (0～1)
-    float affect = saturate(1.0f - distance / spotLight.range);
+    float affect = 1.0f - 1.0f / spotLight.range * distance;
+    if (affect < 0.0f)
+    {
+        affect = 0.0f;
+    }
     affect = pow(affect, 3.0f); // 急峻に減衰
+    diff *= affect;
+    spec *= affect;
 
     // スポット角度による減衰
-    float3 spotDir = normalize(spotLight.direction);
-    float cosAngle = dot(ligDir, spotDir); // cosθ
-    float cosLimit = cos(spotLight.angle); // 角度をラジアン指定にしておく
+    float angle = dot(ligDir, spotLight.direction); // cosθ
+    angle = abs(acos(angle));
 
     // cosθがcosLimitより小さければ外側 → 影響ゼロ
-    float spotAffect = smoothstep(cosLimit, 1.0f, cosAngle);
+    float spotAffect = 1.0f - 1.0f / spotLight.angle * angle;
+    if (spotAffect < 0.0f)
+    {
+        spotAffect = 0.0f;
+    }
+    spotAffect = pow(spotAffect, 0.1f);
 
     // 拡散+鏡面に減衰を掛け合わせ
-    float3 lig = (diff + spec) * affect * spotAffect;
+    diff *= spotAffect;
+    spec *= spotAffect;
+
+    float3 lig = diff + spec;
 
     return lig;
 }
