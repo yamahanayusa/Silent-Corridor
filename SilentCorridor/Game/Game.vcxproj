@@ -225,6 +225,8 @@
   <ItemGroup>
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Character\Enemy.cpp" />
+    <ClCompile Include="UI\IInventoryProvider.cpp" />
+    <ClCompile Include="UI\ItemSlot.cpp" />
     <ClCompile Include="Item\FlashBattery.cpp" />
     <ClCompile Include="Item\FlashTrigger.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -242,10 +244,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="UI\UIHUDElements.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character\Character.h" />
     <ClInclude Include="Character\Enemy.h" />
+    <ClInclude Include="UI\IInventoryProvider.h" />
+    <ClInclude Include="UI\ItemSlot.h" />
     <ClInclude Include="Item\FlashBattery.h" />
     <ClInclude Include="Item\FlashTrigger.h" />
     <ClInclude Include="Game.h" />
@@ -260,6 +265,7 @@
     <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="UI\UIHUDElements.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

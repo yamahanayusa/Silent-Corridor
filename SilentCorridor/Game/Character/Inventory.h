@@ -27,11 +27,15 @@ public:
 	// バッテリーの在庫を減らす
 	bool UseFlash();
 
-	// 現在のバッテリーの個数を取得する
+	// 現在のバッテリーの所持数を取得する
 	int GetFlashCount()const;
-private:
-	bool m_hasKey = false;	// 鍵の管理
 
-	int m_flashCount = 4;	// バッテリーの在庫の管理
+	// 現在の鍵の所持数を所得する
+	int GetKeyCount()const;
+private:
+	bool m_hasKey = false; // 鍵の管理
+
+	int m_flashCount = 4; // バッテリーの在庫の管理
+	int m_keyCount = 0; // 鍵の所持数
 };
 

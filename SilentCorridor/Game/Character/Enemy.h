@@ -70,5 +70,5 @@ private:
     int m_logicState = enEnemyState_Walk; // 現在の状態
 
     ModelRender m_modelRender;
-    AnimationClip m_animationClips[enAnimationClip_Num]; //アニメーションクリップ
+    AnimationClip m_animationClips[enAnimationClip_Num]; // アニメーションクリップ
 };

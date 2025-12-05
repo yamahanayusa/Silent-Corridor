@@ -60,10 +60,19 @@ bool Inventory::UseFlash()
 }
 
 /// <summary>
-/// Flash ‚ÌŒ»İ‚ÌİŒÉ”‚ğæ“¾‚·‚éB
+/// Flash‚ÌŒ»İ‚ÌİŒÉ”‚ğæ“¾‚·‚éB
 /// </summary>
 /// <returns></returns>
 int Inventory::GetFlashCount() const
 {
     return m_flashCount;
+}
+
+/// <summary>
+/// Key‚ÌŒ»İ‚ÌŠ”‚ğæ“¾‚·‚é
+/// </summary>
+/// <returns></returns>
+int Inventory::GetKeyCount() const
+{
+    return m_keyCount;
 }

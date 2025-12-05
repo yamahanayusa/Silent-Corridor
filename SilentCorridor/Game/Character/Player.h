@@ -1,13 +1,11 @@
 #pragma once
-#include "Character.h"
+#include "Character/Character.h"
+#include "UI/IInventoryProvider.h"
+#include "Character/Inventory.h"
 
-class Inventory;
 class FlashTrigger;
 
-/// <summary>
-/// Characterクラスを継承している
-/// </summary>
-class Player : public Character
+class Player : public Character, public IInventoryProvider
 {
 public:
     Player() {};
@@ -20,6 +18,14 @@ public:
 
     // インベントリのポインタを返すゲッター
     Inventory* GetInventory()const { return m_inventory; }
+
+    // IInventoryProviderの純粋仮想関数を実装
+    int GetKeyCount() const override {
+        return m_inventory ? m_inventory->GetKeyCount() : 0;
+    }
+    int GetFlashCount() const override {
+        return m_inventory ? m_inventory->GetFlashCount() : 0;
+    }
 
 private:
     void HandleInput();
