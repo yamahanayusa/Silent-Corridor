@@ -11,7 +11,7 @@ public:
 	~UIHUDElements();
 
 	bool Start()override;
-	void Update(float deltaTime);
+	void Update();
 	void Render(RenderContext& rc)override;
 	void RenderInit();
 
@@ -26,9 +26,4 @@ private:
 	// 管理するアイテム
 	ItemSlot* m_keySlot = nullptr;
 	ItemSlot* m_flashSlot = nullptr;
-
-	bool m_isInitializedDrawing = false; // 描画の初期化が完了したかのフラグ
-	bool m_renderInitialized = false; // Renderでの初期化完了フラグ
-
-	int m_updateDelayFrames = 0;
 };

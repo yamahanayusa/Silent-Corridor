@@ -13,6 +13,8 @@ namespace nsK2EngineLow {
 		//スプライトの幅と高さを指定する。
 		initData.m_width = w;
 		initData.m_height = h;
+		// 透過
+		initData.m_alphaBlendMode = AlphaBlendMode_Trans;
 		//Sprite初期化オブジェクトを使用して、Spriteを初期化する。
 		m_sprite.Init(initData);
 	}

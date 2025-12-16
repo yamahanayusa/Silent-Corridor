@@ -12,15 +12,14 @@ bool Game::Start()
 	// “–‚½‚è”»’è‚Ì‰ÂŽ‹‰»
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
-	if (m_uiSlot && m_player) {
-		m_uiSlot->SetInventoryProvider(m_player);
-	}
 	m_player = NewGO<Player>(0, "player");
 	m_stage = NewGO<Stage>(0, "stage");
 	m_gameCamera = NewGO<GameCamera>(0, "gamecamera");
 	m_enemy = NewGO<Enemy>(0, "enemy");
 	m_lighter = NewGO<Lighter>(0, "lighter");
 	m_uiSlot = NewGO<UIHUDElements>(0, "uislot");
+	m_uiSlot->RenderInit();
+	m_uiSlot->SetInventoryProvider(m_player);
 
 	m_modelRender.Update();
 	return true;
@@ -29,19 +28,11 @@ bool Game::Start()
 void Game::Update()
 {
 	if (m_uiSlot) {
-		m_uiSlot->Update(g_gameTime->GetFrameDeltaTime());
+		m_uiSlot->Update();
 	}
 }
 
 void Game::Render(RenderContext& rc)
 {
-	if (m_uiSlot) {
-		m_uiSlot->RenderInit();
-	}
-
 	m_modelRender.Draw(rc);
-
-	if (m_uiSlot) {
-		m_uiSlot->Render(rc);
-	}
 }

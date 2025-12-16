@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "ItemSlot.h"
 
 ItemSlot::ItemSlot(int itemID, const char* iconFilePath, float x, float y) 
@@ -16,70 +16,106 @@ ItemSlot::~ItemSlot()
     m_digitSprites.clear();
 }
 
-void ItemSlot::Render(RenderContext& rc)
+void ItemSlot::Render(RenderContext& rc,int count)
 {
     m_icon->Draw(rc);
 
-    // •\¦’†‚ÌŒ…”•ª‚¾‚¯•`‰æ
-    size_t drawCount = ("x " + std::to_string(m_currentCount)).length();
-    for (size_t i = 0; i < drawCount && i < m_digitSprites.size(); ++i) {
-        m_digitSprites[i]->Draw(rc);
-    }
-}
-
-void ItemSlot::UpdateCountText(int newCount)
-{
-    m_currentCount = newCount;
-    std::string countStr = "x " + std::to_string(m_currentCount);
-
-    // ƒXƒvƒ‰ƒCƒg‚Ì”‚ª‘«‚è‚È‚¯‚ê‚Î¶¬
-    while (m_digitSprites.size() < countStr.length()) {
-        SpriteRender* newDigit = new SpriteRender();
-        m_digitSprites.push_back(newDigit);
+    // Xãƒãƒ¼ã‚¯ã®æç”»
+    if (m_digitSprites.size() > 0 && m_digitSprites[0]) {
+        m_digitSprites[0]->Draw(rc);
     }
 
-    // ŠeŒ…‚Ì‰æ‘œƒtƒ@ƒCƒ‹‚ÆˆÊ’u‚ğXV
-    for (size_t i = 0; i < countStr.length(); ++i) {
-        char character = countStr[i];
-        SpriteRender* sprite = m_digitSprites[i];
+    // æ•°å­—ã®æç”»
+    int spriteIndex = count + 1; // count (0ã€œ5) -> Index (1ã€œ6)
 
-        // •¶š‚É‘Î‰‚·‚éƒtƒ@ƒCƒ‹ƒpƒX‚ğŒˆ’è
-        std::string charFilePath;
-        if (character == 'x') {
-            charFilePath = "Assets/modelData/UI/x.dds";
-        }
-        else if (character >= '0' && character <= '5') {
-            charFilePath = "Assets/modelData/UI/" + std::string(1, character) + ".dds";
-        }
-
-        // •`‰æ‚ªŠ®—¹‚µ‚Ä‚¢‚é‚Æ‚«‚Ì‚İŒÄ‚Ô
-        if (m_isRenderInitialized) {
-            sprite->Init(charFilePath.c_str(), 32.0f, 32.0f);
-        }
-
-        // ˆÊ’uİ’è
-        float offsetX = i * 30.0f;
-        sprite->SetPosition(m_textStartPosition + Vector3(offsetX, 0.0f, 0.0f));
+    if (spriteIndex <= 6 && m_digitSprites.size() > spriteIndex && m_digitSprites[spriteIndex]) {
+        m_digitSprites[spriteIndex]->Draw(rc);
     }
 }
 
 void ItemSlot::RenderInit()
 {
-    if (m_isRenderInitialized) return;
+    // ã‚¢ã‚¤ã‚³ãƒ³ã®åˆæœŸåŒ–
+    m_icon->Init(m_iconFilePath.c_str(), 120.0f, 120.0f);
 
-    if (m_icon) {
-        // ƒAƒCƒRƒ“‚Ì‰Šú‰»
-        m_icon->Init(m_iconFilePath.c_str(), 32.0f, 32.0f);
+    // åˆæœŸè¨­å®šã‚’ï¼‘åº¦ã ã‘å®Ÿè¡Œ
+    m_icon->SetPosition(m_iconPosition);
+    m_icon->SetScale({ 1.0f, 1.0f, 1.0f });
 
-        // ‰Šúİ’è‚ğ‚P“x‚¾‚¯Às
-        m_icon->SetPosition(m_iconPosition);
-        m_icon->SetScale({ 1.0f, 1.0f, 1.0f });
+    m_icon->Update();
 
-        m_icon->Update();
+    // ãƒ†ã‚­ã‚¹ãƒˆé–‹å§‹ä½ç½®ã‚‚è¨­å®š
+    m_textStartPosition = { m_x - 10.0f, m_y - 80.0f, 0.0f };
+
+    // xã®åˆæœŸåŒ–
+    SpriteRender* sprite = new SpriteRender;
+    sprite->Init("Assets/modelData/UI/x.dds", 16.0f, 16.0f);
+    sprite->SetPosition(m_textStartPosition);
+    sprite->Update();
+    m_digitSprites.push_back(sprite);
+
+    // å„æ¡ã®ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã¨ä½ç½®ã‚’æ›´æ–°
+    for (int i = 0; i <= 5; ++i) {
+        char digitChar = '0' + i;
+        SpriteRender* sprite = new SpriteRender;
+
+        // æ–‡å­—ã«å¯¾å¿œã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’æ±ºå®š
+        std::string charFilePath;
+        charFilePath = "Assets/modelData/UI/" + std::string(1, digitChar) + ".dds";
+
+        sprite->Init(charFilePath.c_str(), 32.0f, 32.0f);
+
+        // ä½ç½®è¨­å®š
+        sprite->SetPosition(m_textStartPosition + Vector3(0.0f, 0.0f, 0.0f));
+
+        m_digitSprites.push_back(sprite);
+    }
+    
+    SetSelected(false);
+}
+
+void ItemSlot::UpdateCountText(int count)
+{
+    // xã®ãƒãƒ¼ã‚¯ã®ä½ç½®è¨­å®šã¨æç”»
+    // xã®ãƒãƒ¼ã‚¯ã¯æ•°å­—ã®å·¦å´ã«å›ºå®šé…ç½®
+    float xOffset_X = 0.0f;
+
+    if (m_digitSprites.size() > 0 && m_digitSprites[0]) {
+        m_digitSprites[0]->SetPosition(m_textStartPosition + Vector3(xOffset_X, 0.0f, 0.0f));
+        m_digitSprites[0]->Update();
     }
 
-    // ƒeƒLƒXƒgŠJnˆÊ’u‚àİ’è
-    m_textStartPosition = { m_x + 50.0f, m_y, 0.0f };
 
-    m_isRenderInitialized = true;
+    // æ•°å­—ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®é¸æŠã¨é…ç½®ã€æç”»ãƒªã‚¹ãƒˆã¸ã®ç™»éŒ²
+    // è¡¨ç¤ºã—ãŸã„æ•°å­—ã«å¯¾å¿œã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¨ˆç®—
+    int spriteIndex = count + 1;
+
+    // æ•°å­—ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ä½ç½®
+    float xOffset_Digit = 18.0f;
+
+    // m_digitSprites[]0ï½5ã¾ã§ã‚’å‡¦ç†
+    if (spriteIndex <= 6 && m_digitSprites[spriteIndex]) {
+        SpriteRender* sprite = m_digitSprites[spriteIndex];
+
+        // ä½ç½®ã‚’è¨­å®š
+        sprite->SetPosition(m_textStartPosition + Vector3(xOffset_Digit, 0.0f, 0.0f));
+
+        // æç”»ãƒªã‚¹ãƒˆã¸ã®ç™»éŒ²ã¨è¡Œåˆ—æ›´æ–°
+        sprite->Update();
+    }
+}
+
+void ItemSlot::SetSelected(bool isSelected)
+{
+    m_isSelected = isSelected;
+
+    // ã‚¢ã‚¤ã‚³ãƒ³ã®ã‚«ãƒ©ãƒ¼ã‚’è¨­å®š
+    if (m_icon) {
+        if (isSelected) {
+            m_icon->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+        }
+        else {
+            m_icon->SetColor({ 1.0f,1.0f,1.0f,0.3f });
+        }
+    }
 }

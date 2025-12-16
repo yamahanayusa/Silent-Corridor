@@ -11,9 +11,10 @@ public:
 	ItemSlot(int itemID, const char* iconFilePath, float x, float y);
 	~ItemSlot();
 
-	void Render(RenderContext& rc);
-	void UpdateCountText(int newCount); // カウントの変更でテキストの更新
+	void Render(RenderContext& rc,int count);
 	void RenderInit(); // 描画が安定したときに呼ばれるInit
+	void UpdateCountText(int count);
+	void SetSelected(bool isSelected);
 
 private:
 	SpriteRender* m_icon = nullptr; // アイテムアイコンの画像
@@ -30,6 +31,5 @@ private:
 	float m_x = 0.0f; // xの初期値
 	float m_y = 0.0f; // yの初期値
 
-	bool m_isInitialized = false; // 初期化完了確認用フラグ
-	bool m_isRenderInitialized = false; // 描画ロードが完了確認用フラグ
+	bool m_isSelected = false;
 };
