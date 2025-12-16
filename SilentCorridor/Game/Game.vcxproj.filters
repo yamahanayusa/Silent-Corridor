@@ -50,6 +50,7 @@
     <ClCompile Include="UI\ItemSlot.cpp" />
     <ClCompile Include="UI\UIHUDElements.cpp" />
     <ClCompile Include="UI\IInventoryProvider.cpp" />
+    <ClCompile Include="GameScreen\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -93,6 +94,7 @@
     <ClInclude Include="UI\ItemSlot.h" />
     <ClInclude Include="UI\UIHUDElements.h" />
     <ClInclude Include="UI\IInventoryProvider.h" />
+    <ClInclude Include="GameScreen\Title.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

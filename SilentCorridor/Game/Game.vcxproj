@@ -225,6 +225,7 @@
   <ItemGroup>
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Character\Enemy.cpp" />
+    <ClCompile Include="GameScreen\Title.cpp" />
     <ClCompile Include="UI\IInventoryProvider.cpp" />
     <ClCompile Include="UI\ItemSlot.cpp" />
     <ClCompile Include="Item\FlashBattery.cpp" />
@@ -249,6 +250,7 @@
   <ItemGroup>
     <ClInclude Include="Character\Character.h" />
     <ClInclude Include="Character\Enemy.h" />
+    <ClInclude Include="GameScreen\Title.h" />
     <ClInclude Include="UI\IInventoryProvider.h" />
     <ClInclude Include="UI\ItemSlot.h" />
     <ClInclude Include="Item\FlashBattery.h" />
