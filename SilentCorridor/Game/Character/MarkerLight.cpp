@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "Lighter.h"
-#include "Character/Player.h"
+#include "MarkerLight.h"
+#include "Character/Enemy.h"
 
 /// <summary>
 /// 初期化
 /// </summary>
 /// <returns></returns>
-bool Lighter::Start()
+bool MarkerLight::Start()
 {
     // 新しいポイントライトを登録
     m_pointLight = new PointLight();
@@ -24,11 +24,11 @@ bool Lighter::Start()
 /// <summary>
 /// 更新処理
 /// </summary>
-void Lighter::Update()
+void MarkerLight::Update()
 {
     // プレイヤーの位置を取得
-    m_player = FindGO<Player>("player");
-    if (m_player == nullptr || m_pointLight == nullptr) {
+    m_enemy = FindGO<Enemy>("enemy");
+    if (m_enemy == nullptr || m_pointLight == nullptr) {
         return;
     }
 
@@ -45,16 +45,16 @@ void Lighter::Update()
 /// <summary>
 /// 炎の揺らぎを計算
 /// </summary>
-void Lighter::UpdateLightPosition()
+void MarkerLight::UpdateLightPosition()
 {
-    Vector3 playerPos = m_player->GetPosition();
-    m_lightPos = playerPos + m_offset;
+    Vector3 enemyPos = m_enemy->GetPosition();
+    m_lightPos = enemyPos + m_offset;
 }
 
 /// <summary>
 /// ライトの位置の更新
 /// </summary>
-void Lighter::UpdateFlicker()
+void MarkerLight::UpdateFlicker()
 {
     // 前のフレームから今のフレームまでに経過した時間を取得
     float time = g_gameTime->GetFrameDeltaTime();
@@ -73,7 +73,7 @@ void Lighter::UpdateFlicker()
 /// <summary>
 /// 計算結果をライトに反映
 /// </summary>
-void Lighter::ApplyToLight()
+void MarkerLight::ApplyToLight()
 {
     m_pointLight->SetPosition(m_lightPos + m_flickerOffset);
     m_pointLight->SetColor(m_flickerColor);

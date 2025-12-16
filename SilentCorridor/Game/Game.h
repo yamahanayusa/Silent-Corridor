@@ -4,7 +4,7 @@ class Stage;
 class Player;
 class GameCamera;
 class Enemy;
-class Lighter;
+class MarkerLight;
 class UIHUDElements;
 
 class Game : public IGameObject
@@ -21,7 +21,7 @@ private:
 	Player* m_player = nullptr;
 	GameCamera* m_gameCamera = nullptr;
 	Enemy* m_enemy = nullptr;
-	Lighter* m_lighter = nullptr;
+	MarkerLight* m_markerLight = nullptr;
 	UIHUDElements* m_uiSlot = nullptr;
 
 	ModelRender m_modelRender;

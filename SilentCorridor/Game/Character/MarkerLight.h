@@ -1,14 +1,14 @@
 #pragma once
 
-class Player;
+class Enemy;
 /// <summary>
 /// ライター風ポイントライト
 /// </summary>
-class Lighter : public IGameObject
+class MarkerLight : public IGameObject
 {
 public:
-    Lighter() {}
-    ~Lighter() {}
+    MarkerLight() {}
+    ~MarkerLight() {}
     bool Start() override;
     void Update() override;
 
@@ -19,10 +19,10 @@ private:
 
 private:
     PointLight* m_pointLight = nullptr; // ポイントライト本体
-    Player* m_player = nullptr;
+    Enemy* m_enemy = nullptr;
 
-    Vector3 m_offset = { 0.0f, 80.0f, 50.0f }; // プレイヤーの手元オフセット
-    Vector3 m_colorBase = { 1.0f, 0.7f, 0.3f }; // 炎っぽいオレンジ
+    Vector3 m_offset = { 0.0f, 50.0f, 50.0f }; // プレイヤーの手元オフセット
+    Vector3 m_colorBase = { 0.5f, 0.35f, 0.15f }; // 炎っぽいオレンジ
     Vector3 m_lightPos = Vector3::Zero; // ライトの位置
     Vector3 m_flickerColor = Vector3::Zero; // 揺らぎの色
     Vector3 m_flickerOffset = Vector3::Zero; // ゆらぎで動かす位置

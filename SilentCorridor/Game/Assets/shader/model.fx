@@ -182,7 +182,7 @@ float3 CalcPointLig(SPSIn psIn, PointLight pointLig)
     // 拡散反射光と鏡面反射光に減衰を乗算
     float3 lig = (diffPoint * affect) + (specPoint * affect);
     
-    lig *= 2000;
+    lig *= 500;
 
     return lig;
 }
