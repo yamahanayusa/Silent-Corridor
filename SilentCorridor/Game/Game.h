@@ -5,6 +5,7 @@ class Player;
 class GameCamera;
 class Enemy;
 class Lighter;
+class UIHUDElements;
 
 class Game : public IGameObject
 {
@@ -21,6 +22,7 @@ private:
 	GameCamera* m_gameCamera = nullptr;
 	Enemy* m_enemy = nullptr;
 	Lighter* m_lighter = nullptr;
+	UIHUDElements* m_uiSlot = nullptr;
 
 	ModelRender m_modelRender;
 };

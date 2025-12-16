@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Character/Inventory.h"
 #include "Item/FlashTrigger.h"
+#include "UI/ItemSlot.h"
 
 namespace
 {
@@ -36,6 +37,9 @@ void Player::Update()
     // 移動
     HandleInput();
 
+    // アイテムの選択の入力処理
+    HandleSelectionInput();
+
     // アイテム入力
     HandleItemInput();
 
@@ -59,6 +63,17 @@ Vector3 Player::GetForwardVector() const
     forward.Normalize();
 
     return forward;
+}
+
+int Player::GetSelectedItemID() const
+{
+    if (m_selectedIndex == 0) {
+        return ItemID::KEY;
+    }
+    else if (m_selectedIndex == 1) {
+        return ItemID::FLASH_CAMERA;
+    }
+    return 0;
 }
 
 void Player::HandleInput()
@@ -94,17 +109,53 @@ void Player::HandleItemInput()
 {
     if (g_pad[0]->IsTrigger(enButtonA))
     {
-        // FlashTriggerコンポーネントにフラッシュ処理の実行を依頼する
-        if (m_flashTrigger) {
-            bool success = m_flashTrigger->TryUseFlash();
+        // 現在使用されているアイテムIDを取得
+        int selectedID = GetSelectedItemID();
 
-            // 処理結果に応じて、SEやUIフィードバックを行う
-            if (success) {
- 
-            }
-            else {
-             
+        // フラッシュカメラの使用処理
+        if (selectedID == ItemID::FLASH_CAMERA) {
+            // FlashTriggerコンポーネントにフラッシュ処理の実行を依頼する
+            if (m_flashTrigger) {
+                bool success = m_flashTrigger->TryUseFlash();
+
+                // 処理結果に応じてSEやUIフィードバックを行う
+                if (success) {
+
+                }
+                else {
+
+                }
             }
         }
+    
+    }
+}
+
+void Player::HandleSelectionInput()
+{
+    static constexpr int ITEM_COUNT = 2;
+
+    // 左矢印キーが押されたら前のアイテムへ
+    if (g_pad[0]->IsTrigger(enButtonLeft)) {
+        int newIndex = m_selectedIndex - 1;
+
+        // 現在がインデックス0で左を押したら最後のインデックスに戻る
+        if (newIndex < 0) {
+            newIndex = ITEM_COUNT - 1;
+        }
+
+        SelectIndex(newIndex);
+    }
+
+    // 右矢印キーが押されたら次のアイテムへ
+    else if (g_pad[0]->IsTrigger(enButtonRight)) {
+        int newIndex = m_selectedIndex + 1;
+
+        // 現在が最後のインデックスで→を押したらインデックス0に戻る
+        if (newIndex >= ITEM_COUNT) {
+            newIndex = 0;
+        }
+
+        SelectIndex(newIndex);
     }
 }

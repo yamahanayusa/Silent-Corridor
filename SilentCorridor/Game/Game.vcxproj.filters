@@ -47,6 +47,9 @@
     <ClCompile Include="Item\FlashTrigger.cpp">
       <Filter>Item</Filter>
     </ClCompile>
+    <ClCompile Include="UI\ItemSlot.cpp" />
+    <ClCompile Include="UI\UIHUDElements.cpp" />
+    <ClCompile Include="UI\IInventoryProvider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -87,6 +90,9 @@
     <ClInclude Include="Item\FlashTrigger.h">
       <Filter>Item</Filter>
     </ClInclude>
+    <ClInclude Include="UI\ItemSlot.h" />
+    <ClInclude Include="UI\UIHUDElements.h" />
+    <ClInclude Include="UI\IInventoryProvider.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

@@ -9,7 +9,7 @@ namespace {
 	const Vector3 COLOR = { 1000.0f,1000.0f,1000.0f };
 	const Vector3 DIRECTION = { 0.0f,0.0f,1.0f };
 	const float RANGE = 20000.0f;
-	const float ANGLE = Math::DegToRad(300.0f);
+	const float ANGLE = Math::DegToRad(2500.0f);
 
 	// フラッシュ効果のパラメータ
 	const float STAN_RANGE = 500.0f; // スタンの有効範囲

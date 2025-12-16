@@ -126,6 +126,7 @@ namespace nsK2EngineLow {
 		Render2D(rc);
 		CopyMainRenderTargetToFrameBufferSprite(rc);
 		m_registerModels.clear();
+		m_2DObjects.clear();
 	}
 
 	void RenderingEngine::Render2D(RenderContext& rc)
@@ -136,7 +137,7 @@ namespace nsK2EngineLow {
 		m_mainSprite.Draw(rc);
 		for (auto& renderObj : m_2DObjects)
 		{
-			renderObj->Draw(rc);
+			renderObj->OnRender2D(rc);
 		}
 		rc.WaitUntilFinishDrawingToRenderTarget(m_2DRenderTarget);
 

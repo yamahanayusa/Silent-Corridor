@@ -109,6 +109,23 @@ namespace nsK2EngineLow {
 			return m_sprite.GetSprite();
 		}
 
+		/// <summary>
+		/// 2D描画パスから呼ばれる処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		void OnRender2D(RenderContext& rc)
+		{
+			m_sprite.Draw(rc);
+		}
+
+		/// <summary>
+		/// 色の設定
+		/// </summary>
+		/// <param name="color"></param>
+		void SetColor(const Vector4& color) {
+			m_sprite.SetMulColor(color);
+		}
+
 	private:
 		Sprite m_sprite;//スプライト。
 		Vector3	m_position;//座標。
