@@ -226,6 +226,7 @@
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Character\Enemy.cpp" />
     <ClCompile Include="GameScreen\Title.cpp" />
+    <ClCompile Include="Character\MarkerLight.cpp" />
     <ClCompile Include="UI\IInventoryProvider.cpp" />
     <ClCompile Include="UI\ItemSlot.cpp" />
     <ClCompile Include="Item\FlashBattery.cpp" />
@@ -234,7 +235,6 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Character\Inventory.cpp" />
     <ClCompile Include="Item\Item.cpp" />
-    <ClCompile Include="Item\Lighter.cpp" />
     <ClCompile Include="Item\KeyItem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Character\Player.cpp" />
@@ -251,6 +251,7 @@
     <ClInclude Include="Character\Character.h" />
     <ClInclude Include="Character\Enemy.h" />
     <ClInclude Include="GameScreen\Title.h" />
+    <ClInclude Include="Character\MarkerLight.h" />
     <ClInclude Include="UI\IInventoryProvider.h" />
     <ClInclude Include="UI\ItemSlot.h" />
     <ClInclude Include="Item\FlashBattery.h" />
@@ -260,7 +261,6 @@
     <ClInclude Include="Character\Inventory.h" />
     <ClInclude Include="Item\Item.h" />
     <ClInclude Include="Item\IItem.h" />
-    <ClInclude Include="Item\Lighter.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Item\KeyItem.h" />
     <ClInclude Include="resource.h" />

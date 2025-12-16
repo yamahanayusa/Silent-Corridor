@@ -12,7 +12,7 @@ namespace {
 	const float ANGLE = Math::DegToRad(2500.0f);
 
 	// フラッシュ効果のパラメータ
-	const float STAN_RANGE = 500.0f; // スタンの有効範囲
+	const float STAN_RANGE = 800.0f; // スタンの有効範囲
 	const float STAN_DURACTION = 5.0f; // スタン時間
 }
 
