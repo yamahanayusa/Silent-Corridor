@@ -49,6 +49,7 @@
     <ClCompile Include="UI\IInventoryProvider.cpp" />
     <ClCompile Include="GameScreen\Title.cpp" />
     <ClCompile Include="Character\MarkerLight.cpp" />
+    <ClCompile Include="UI\UITimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="UI\IInventoryProvider.h" />
     <ClInclude Include="GameScreen\Title.h" />
     <ClInclude Include="Character\MarkerLight.h" />
+    <ClInclude Include="UI\UITimer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

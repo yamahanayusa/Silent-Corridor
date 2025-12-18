@@ -57,17 +57,17 @@ void MarkerLight::UpdateLightPosition()
 void MarkerLight::UpdateFlicker()
 {
     // 前のフレームから今のフレームまでに経過した時間を取得
-    float time = g_gameTime->GetFrameDeltaTime();
+    m_totalTime += g_gameTime->GetFrameDeltaTime();
 
     // 明るさの揺らぎ
-    m_flicker = 1.0f + sinf(time * m_flickerSpeed) * m_flickerStrength;
+    m_flicker = 1.0f + sinf(m_totalTime * m_flickerSpeed) * m_flickerStrength;
 
     // 炎の揺らめきによる位置のブレ
-    m_flickerOffset = Vector3(sinf(time * 3.1f) * 3.0f, cosf(time * 2.7f) * 3.0f, 0.0f);
+    m_flickerOffset = Vector3(sinf(m_totalTime * 3.1f) * 3.0f, cosf(m_totalTime * 2.7f) * 3.0f, 0.0f);
 
     // 赤～黄の色の変化
-    float colorShift = 0.05 * sinf(time * 2.3f);
-    m_flickerColor = Vector3(1.0f, 0.7f + colorShift, 0.3f) * m_flicker;
+    float colorShift = 0.1 * sinf(m_totalTime * 2.3f);
+    m_flickerColor = Vector3(1.0f, 0.1f + colorShift, 0.0f) * m_flicker;
 }
 
 /// <summary>

@@ -6,6 +6,8 @@
 #include "Character/Enemy.h"
 #include "Character/MarkerLight.h"
 #include "UI/UIHUDElements.h"
+#include "Item/FlashBattery.h"
+#include "UI/UITimer.h"
 
 bool Game::Start()
 {
@@ -20,13 +22,26 @@ bool Game::Start()
 	m_uiSlot = NewGO<UIHUDElements>(0, "uislot");
 	m_uiSlot->RenderInit();
 	m_uiSlot->SetInventoryProvider(m_player);
+	m_flashBattery = NewGO< FlashBattery>(0, "flashBattery");
+	m_uiTimer = NewGO<UITimer>(0, "uiTimer");
 
-	m_modelRender.Update();
+
+	if (m_player) {
+		m_player->SetUIHUDElements(m_uiSlot);
+	}
+
 	return true;
 }
 
 void Game::Update()
 {
+	// Œo‰ßŽžŠÔ‚ðXV
+	m_elapsedTime += g_gameTime->GetFrameDeltaTime();
+
+	if (m_uiTimer != nullptr){
+		m_uiTimer->SetElapsedTime(m_elapsedTime);
+
+	}
 	if (m_uiSlot) {
 		m_uiSlot->Update();
 	}
@@ -34,5 +49,4 @@ void Game::Update()
 
 void Game::Render(RenderContext& rc)
 {
-	m_modelRender.Draw(rc);
 }

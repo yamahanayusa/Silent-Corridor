@@ -239,11 +239,13 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Bloom.cpp" />
-    <ClCompile Include="RenderingEngine.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="camera\CameraCollisionSolver.cpp" />
     <ClCompile Include="camera\SpringCamera.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="RenderingEngine.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -532,11 +534,13 @@
     </ClInclude>
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Bloom.h" />
-    <ClInclude Include="RenderingEngine.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="camera\CameraCollisionSolver.h" />
     <ClInclude Include="camera\SpringCamera.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="RenderingEngine.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

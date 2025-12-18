@@ -29,6 +29,7 @@ private:
 
     float m_range = 500.0f; // Œõ‚Ì“Í‚­”ÍˆÍ
     float m_flicker = 1.5f; // –¾‚é‚³‚Ì—h‚ç‚¬
-    float m_flickerSpeed = 20.0f; // —h‚ç‚¬‚Ì‘¬‚³
+    float m_flickerSpeed = 5.0f; // —h‚ç‚¬‚Ì‘¬‚³
     float m_flickerStrength = 0.5f; //—h‚ç‚¬‚Ì‹­‚³
+    float m_totalTime = 0.0f; // ŽžŠÔ‚ð’™‚ß‚é” 
 };
