@@ -64,6 +64,15 @@ namespace nsK2EngineLow {
 		}
 
 		/// <summary>
+		/// 描画するテキストを登録
+		/// </summary>
+		/// <param name="sprite"></param>
+		void RegiterFont(FontRender* fontRender)
+		{
+			m_FontObjects.push_back(fontRender);
+		}
+
+		/// <summary>
 		/// 2Dオブジェクトの描画
 		/// </summary>
 		/// <param name="rc"></param>
@@ -81,6 +90,7 @@ namespace nsK2EngineLow {
 
 		std::vector<ModelRender*>	m_registerModels;		// モデル登録用配列
 		std::vector<SpriteRender*>	m_2DObjects;			// 2Dスプライト登録用配列
+		std::vector<FontRender*>	m_FontObjects;			// テキスト登録用配列
 	};
 }
 

@@ -31,3 +31,13 @@ bool FlashBattery::OnCollect(Player* player)
 	// 追加に失敗した場合
 	return false;
 }
+
+void FlashBattery::Render(RenderContext& rc)
+{
+	// モデルの位置をm_positionに更新
+	m_modelRender.SetPosition(m_position);
+
+	// 行列の更新と描画
+	m_modelRender.Update();
+	m_modelRender.Draw(rc);
+}

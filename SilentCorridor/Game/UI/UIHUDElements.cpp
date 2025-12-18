@@ -24,6 +24,12 @@ UIHUDElements::~UIHUDElements()
 
 bool UIHUDElements::Start()
 {
+    m_collectMessageRenderer.Init("Assets/modelData/UI/Acquisition.dds", 200.0f, 200.0f);
+    m_collectMessageRenderer.SetPosition(Vector3(200.0f, -50.0f, 0.0f));
+
+    // 透明度設定 (初期状態では非表示)
+    m_collectMessageRenderer.SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+
    return true;
 }
 
@@ -47,6 +53,8 @@ void UIHUDElements::Update()
             m_flashSlot->SetSelected(selectedIndex == 1);
         }
     }
+
+    m_collectMessageRenderer.Update();
 }
 
 void UIHUDElements::Render(RenderContext& rc)
@@ -61,12 +69,24 @@ void UIHUDElements::Render(RenderContext& rc)
     if (m_flashSlot){
         m_flashSlot->Render(rc, m_inventoryProvider->GetFlashCount());
     }
-
+    m_collectMessageRenderer.Draw(rc);
 }
 
 void UIHUDElements::RenderInit()
 {
-    // 各 ItemSlot の Init を実行
+    // 各ItemSlotのInitを実行
     m_keySlot->RenderInit();
     m_flashSlot->RenderInit();
+}
+
+void UIHUDElements::SetCollectMessageVisible(bool isVisible, const char* message)
+{
+    if (isVisible)
+    {
+        m_collectMessageRenderer.SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+    }
+    else
+    {
+        m_collectMessageRenderer.SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+    }
 }

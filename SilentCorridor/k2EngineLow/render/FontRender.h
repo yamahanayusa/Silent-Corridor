@@ -7,21 +7,14 @@ namespace nsK2EngineLow {
 	class FontRender
 	{
 	public:
+		static const int MAX_TEXT_SIZE = 256;
 		/// <summary>
 		/// 表示する文字を設定。
 		/// </summary>
 		/// <param name="text">表示する文字。</param>
 		void SetText(const wchar_t* text)
 		{
-			m_text = std::unique_ptr<const wchar_t[]>(text);
-		}
-		/// <summary>
-		/// 表示する文字を取得。
-		/// </summary>
-		/// <returns>表示する文字。</returns>
-		const wchar_t* GetText() const
-		{
-			return m_text.get();
+			swprintf_s(m_text, text);
 		}
 		/// <summary>
 		/// 座標を設定。
@@ -107,14 +100,15 @@ namespace nsK2EngineLow {
 		/// 描画処理。
 		/// </summary>
 		/// <param name="rc">レンダ―コンテキスト。</param>
-		void Draw(RenderContext& rc)
-		{
+		void Draw(RenderContext& rc);
+
+		void OnRender2D(RenderContext& rc) {
 			if (m_text == nullptr)
 			{
 				return;
 			}
 			m_font.Begin(rc);
-			m_font.Draw(m_text.get(), Vector2(m_position.x, m_position.y), m_color, m_rotation, m_scale, m_pivot);
+			m_font.Draw(m_text, Vector2(m_position.x, m_position.y), m_color, m_rotation, m_scale, m_pivot);
 			m_font.End(rc);
 		}
 		/// <summary>
@@ -133,7 +127,7 @@ namespace nsK2EngineLow {
 		Vector4	m_color = g_vec4White;//文字の色、デフォルトで白。
 		float m_rotation = 0.0f;//回転。
 		Vector2	m_pivot = Sprite::DEFAULT_PIVOT;//ピボット。
-		std::unique_ptr<const wchar_t[]>m_text = nullptr;//文字。
+		wchar_t	m_text[MAX_TEXT_SIZE];
 		Font m_font;//フォント。
 	};
 }

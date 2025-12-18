@@ -30,4 +30,8 @@ public:
 	// アイテムがインベントリにある状態で使用したときに処理をする
 	// 仮想関数：デフォルト実装(falseを返す)実装は任意
 	virtual bool OnUse(Player* player) { return false; }
+
+	// モデルの描画
+	// 純粋仮想関数：派生クラスで実装が必須
+	virtual void Render(RenderContext& rc) = 0;
 };

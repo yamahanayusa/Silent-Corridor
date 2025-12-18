@@ -127,6 +127,7 @@ namespace nsK2EngineLow {
 		CopyMainRenderTargetToFrameBufferSprite(rc);
 		m_registerModels.clear();
 		m_2DObjects.clear();
+		m_FontObjects.clear();
 	}
 
 	void RenderingEngine::Render2D(RenderContext& rc)
@@ -136,6 +137,10 @@ namespace nsK2EngineLow {
 		rc.ClearRenderTargetView(m_2DRenderTarget);
 		m_mainSprite.Draw(rc);
 		for (auto& renderObj : m_2DObjects)
+		{
+			renderObj->OnRender2D(rc);
+		}
+		for (auto& renderObj : m_FontObjects)
 		{
 			renderObj->OnRender2D(rc);
 		}

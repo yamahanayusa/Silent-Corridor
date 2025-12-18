@@ -227,6 +227,7 @@
     <ClCompile Include="Character\Enemy.cpp" />
     <ClCompile Include="GameScreen\Title.cpp" />
     <ClCompile Include="Character\MarkerLight.cpp" />
+    <ClCompile Include="UI\UITimer.cpp" />
     <ClCompile Include="UI\IInventoryProvider.cpp" />
     <ClCompile Include="UI\ItemSlot.cpp" />
     <ClCompile Include="Item\FlashBattery.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="Character\Enemy.h" />
     <ClInclude Include="GameScreen\Title.h" />
     <ClInclude Include="Character\MarkerLight.h" />
+    <ClInclude Include="UI\UITimer.h" />
     <ClInclude Include="UI\IInventoryProvider.h" />
     <ClInclude Include="UI\ItemSlot.h" />
     <ClInclude Include="Item\FlashBattery.h" />

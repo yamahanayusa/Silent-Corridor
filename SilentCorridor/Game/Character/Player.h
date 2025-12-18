@@ -4,6 +4,8 @@
 #include "Character/Inventory.h"
 
 class FlashTrigger;
+class FlashBattery;
+class UIHUDElements;
 
 class Player : public Character, public IInventoryProvider
 {
@@ -18,7 +20,7 @@ public:
     Vector3 GetForwardVector() const;
 
     // インベントリのポインタを返すゲッター
-    Inventory* GetInventory()const { return m_inventory; }
+    Inventory* GetInventory() const { return m_inventory; }
 
     // IInventoryProviderの純粋仮想関数を実装
     int GetKeyCount() const override {
@@ -40,10 +42,17 @@ public:
         }
     }
 
+    // UI参照を設定するための関数
+    void SetUIHUDElements(UIHUDElements* ui) { m_uiHUDElements = ui; }
+
 private:
     void HandleInput();
     void HandleItemInput(); // アイテム取得入力処理
     void HandleSelectionInput(); // アイテム選択入力処理
+    void HandleItemCollection(); // アイテム取得処理
+    void HandleCollectionMessage(); // アイテム取得メッセージ表示処理
+    
+    FlashBattery* FindNearestCollectableItem(float range); // 近くの取得可能アイテムの検索
 
 public:
     Vector3	m_forward = Vector3::AxisZ; //ライト用
@@ -51,6 +60,7 @@ public:
 private:
     Inventory* m_inventory = nullptr;
     FlashTrigger* m_flashTrigger = nullptr;
+    UIHUDElements* m_uiHUDElements = nullptr;
 
     int m_selectedIndex = 0; // 選択中のインデックス
 };

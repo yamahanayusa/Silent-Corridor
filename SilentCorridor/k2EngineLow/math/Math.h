@@ -17,6 +17,28 @@ namespace nsK2EngineLow {
 		{
 			return deg * (PI / 180.0f);
 		}
+
+		// コサイン関数（視野角で使用）
+		/// <summary>
+		/// ラジアン単位の角度のコサイン(余弦)を返す。
+		/// </summary>
+		/// <param name="rad">Radian単位の角度。</param>
+		/// <returns>コサイン値。</returns>
+		static inline float Cos(float rad)
+		{
+			// float版の標準コサイン関数 cosf を呼び出す
+			return std::cosf(rad);
+		}
+
+		// 平方根関数 (距離計算などで使用する可能性あり)
+		/// <summary>
+		/// 平方根を返す。
+		/// </summary>
+		static inline float Sqrt(float val)
+		{
+			return ::sqrtf(val);
+		}
+
 		/// <summary>
 		/// 角度をRadian単位からDegree単位に変換する。
 		/// </summary>
