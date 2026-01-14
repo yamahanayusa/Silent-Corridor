@@ -2,6 +2,14 @@
 #include "MarkerLight.h"
 #include "Character/Enemy.h"
 
+MarkerLight::~MarkerLight()
+{
+    if (m_pointLight != nullptr) {
+        delete m_pointLight;
+        m_pointLight = nullptr;
+    }
+}
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -27,7 +35,7 @@ bool MarkerLight::Start()
 void MarkerLight::Update()
 {
     // プレイヤーの位置を取得
-    m_enemy = FindGO<Enemy>("enemy");
+    m_enemy = FindGO<Enemy>(m_targetName.c_str());
     if (m_enemy == nullptr || m_pointLight == nullptr) {
         return;
     }

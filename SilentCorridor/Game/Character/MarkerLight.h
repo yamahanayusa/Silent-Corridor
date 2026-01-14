@@ -8,9 +8,13 @@ class MarkerLight : public IGameObject
 {
 public:
     MarkerLight() {}
-    ~MarkerLight() {}
+    ~MarkerLight();
     bool Start() override;
     void Update() override;
+    // 追いかける対象の名前をセット
+    void SetTargetName(const char* name) {
+        m_targetName = name;
+    }
 
 private:
     void UpdateLightPosition(); // 位置の更新
@@ -26,6 +30,8 @@ private:
     Vector3 m_lightPos = Vector3::Zero; // ライトの位置
     Vector3 m_flickerColor = Vector3::Zero; // 揺らぎの色
     Vector3 m_flickerOffset = Vector3::Zero; // ゆらぎで動かす位置
+
+    std::string m_targetName = "enemy";
 
     float m_range = 500.0f; // 光の届く範囲
     float m_flicker = 1.5f; // 明るさの揺らぎ

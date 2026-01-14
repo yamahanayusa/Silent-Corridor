@@ -50,6 +50,7 @@
     <ClCompile Include="GameScreen\Title.cpp" />
     <ClCompile Include="Character\MarkerLight.cpp" />
     <ClCompile Include="UI\UITimer.cpp" />
+    <ClCompile Include="GameScreen\GameOver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -93,6 +94,7 @@
     <ClInclude Include="GameScreen\Title.h" />
     <ClInclude Include="Character\MarkerLight.h" />
     <ClInclude Include="UI\UITimer.h" />
+    <ClInclude Include="GameScreen\GameOver.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

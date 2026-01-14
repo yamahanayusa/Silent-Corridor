@@ -8,14 +8,16 @@ class MarkerLight;
 class UIHUDElements;
 class FlashBattery;
 class UITimer;
+class GameOver;
 
 class Game : public IGameObject
 {
 public:
 	Game() {}
-	~Game() {}
+	~Game();
 	bool Start() override;
 	void Update() override;
+	void OnPlayerCaught();
 	void Render(RenderContext& rc) override;
 
 private:
@@ -24,11 +26,14 @@ private:
 	Stage* m_stage = nullptr;
 	Player* m_player = nullptr;
 	GameCamera* m_gameCamera = nullptr;
-	Enemy* m_enemy = nullptr;
-	MarkerLight* m_markerLight = nullptr;
+	Enemy* m_enemy1 = nullptr;
+	Enemy* m_enemy2 = nullptr;
+	MarkerLight* m_markerLight1 = nullptr;
+	MarkerLight* m_markerLight2= nullptr;
 	UIHUDElements* m_uiSlot = nullptr;
 	FlashBattery* m_flashBattery = nullptr;
 	UITimer* m_uiTimer = nullptr;
+	GameOver* m_gameOver = nullptr;
 
 	ModelRender m_modelRender;
 };

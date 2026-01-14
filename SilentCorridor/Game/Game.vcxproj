@@ -225,6 +225,7 @@
   <ItemGroup>
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Character\Enemy.cpp" />
+    <ClCompile Include="GameScreen\GameOver.cpp" />
     <ClCompile Include="GameScreen\Title.cpp" />
     <ClCompile Include="Character\MarkerLight.cpp" />
     <ClCompile Include="UI\UITimer.cpp" />
@@ -251,6 +252,7 @@
   <ItemGroup>
     <ClInclude Include="Character\Character.h" />
     <ClInclude Include="Character\Enemy.h" />
+    <ClInclude Include="GameScreen\GameOver.h" />
     <ClInclude Include="GameScreen\Title.h" />
     <ClInclude Include="Character\MarkerLight.h" />
     <ClInclude Include="UI\UITimer.h" />

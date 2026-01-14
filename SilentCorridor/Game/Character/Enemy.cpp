@@ -3,11 +3,14 @@
 #include "Stage.h"
 #include "time.h"
 #include "Player.h"
+#include "GameScreen/GameOver.h"
+#include "Game.h"
 
 namespace {
     const float DETECTION_RANGE = 2000.0f; // プレイヤー発見距離
+    const float GAME_OVER_RANGE = 270.0f;  // ゲームオーバーになる距離
     const float WALK_SPEED = 20.0f; // 徘徊速度
-    const float CHASE_SPEED = 35.0f; // 追跡速度
+    const float CHASE_SPEED = 40.0f; // 追跡速度
 
     // ほぼ等しいかを判定するための関数
     bool IsEquals(const Vector3& a, const Vector3& b, const float value = 0.001f)
@@ -49,9 +52,16 @@ bool Enemy::Start()
 
     InitPatrolPoints();
 
-    // 最初のポイントに配置する
+    // 登録されたポイントの中からランダムで選択
     if (!m_patrolPoints.empty()) {
-        SetPosition(m_patrolPoints.at(0));
+        // 0 ～ (ポイントの数 - 1) の間でランダムな数を作る
+        int startIndex = std::rand() % m_patrolPoints.size();
+
+        // 選ばれたランダムな地点に自分を配置
+        SetPosition(m_patrolPoints.at(startIndex));
+
+        // 今いる場所を「現在の巡回先」として覚えておく
+        m_patrolIndex = startIndex;
     }
 
     m_modelRender.SetPosition(GetPosition());
@@ -99,6 +109,16 @@ void Enemy::Update()
         m_player = FindGO<Player>("player");
     }
 
+    // ゲームオーバー判定
+    if (IsPlayerInRange(GAME_OVER_RANGE)) {
+        // ゲームオーバーになったことをGame.cppに知らせる
+        Game* game = FindGO<Game>("game");
+        if (game) {
+            game->OnPlayerCaught();
+        }
+        K2_LOG("捕まった！ゲームオーバー！");
+    }
+
     // 追跡ロジックの実行と状態遷移チェック
     if (m_logicState == enEnemyState_Chase) {
         UpdateChase();
@@ -106,7 +126,7 @@ void Enemy::Update()
 
     // 待機中でなければプレイヤー発見チェックを行う
     else if (m_logicState != enEnemyState_Idle) {
-        if (CheckPlayerDetection()) {
+        if (IsPlayerInRange(DETECTION_RANGE)) {
             m_logicState = enEnemyState_Chase; // 追跡状態へ
             m_speed = CHASE_SPEED;
         }
@@ -271,7 +291,7 @@ void Enemy::UpdateChase()
 
     // 追跡タイマーの管理
     // 追跡中も CheckPlayerDetection() を使用して、プレイヤーが「発見範囲内」にいるか確認
-    if (CheckPlayerDetection()) {
+    if (IsPlayerInRange(DETECTION_RANGE)) {
         m_lostTimer = m_lostDuration; // 発見状態を維持できればタイマーをリセット
     }
     else {
@@ -286,17 +306,15 @@ void Enemy::UpdateChase()
     }
 }
 
-bool Enemy::CheckPlayerDetection()
+bool Enemy::IsPlayerInRange(float range)
 {
-    if (m_player == nullptr) {
-        return false;
-    }
+    if (m_player == nullptr) return false;
 
     Vector3 enemyToPlayer = m_player->GetPosition() - GetPosition();
     float distSq = enemyToPlayer.LengthSq();
 
     // 距離判定: 設定された発見距離の2乗と比較
-    if (distSq < DETECTION_RANGE * DETECTION_RANGE) {
+    if (distSq < range * range) {
         return true;
     }
 
@@ -309,9 +327,7 @@ bool Enemy::CheckPlayerDetection()
 void Enemy::FindNextPatrolTarget()
 {
     // NavMeshが有効でない場合、処理しない
-    if (m_patrolPoints.empty() || !m_navMesh) {
-        return;
-    }
+    if (m_patrolPoints.empty() || !m_navMesh) return;
 
     // ランダムインデックスを選ぶ
     int newIndex = -1;
@@ -338,6 +354,10 @@ void Enemy::FindNextPatrolTarget()
         300.0f
     );
     m_path.Build();
+
+    // 目的地が決まったので、移動状態（m_isMoving）をtrueにして
+    // ステートを Walk または Chase に戻す
+    m_isMoving = true;
 }
 
 /// <summary>
@@ -405,9 +425,11 @@ void Enemy::SetAnimationByState()
         m_waitTimer += deltaTime;
 
         if (m_waitTimer >= m_waitDuration) {
+            // タイマーのリセット
+            m_waitTimer = 0.0f;
             // 待機時間が終了したら次の目標を探索し移動状態へ
             FindNextPatrolTarget();
-            m_logicState = enAnimationClip_Walk; // 移動状態へ遷移
+            m_logicState = enEnemyState_Walk; // 移動状態へ遷移
         }
     }
 }
