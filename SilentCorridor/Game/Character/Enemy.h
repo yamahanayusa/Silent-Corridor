@@ -42,8 +42,9 @@ private:
     void InitPatrolPoints(); // ウェイポイントの定義専用
     void UpdateMove(); // 移動と実行とゴール判定
     void UpdateChase(); // プレイヤーを追跡
-    bool CheckPlayerDetection(); // プレイヤーを発見判定
     void SetAnimationByState(); // アニメーションの設定
+
+    bool IsPlayerInRange(float range); // プレイヤーを発見判定
 
 private:
     nsAI::NaviMesh* m_navMesh = nullptr; // ナビメッシュ

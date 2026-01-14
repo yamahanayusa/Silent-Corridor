@@ -4,7 +4,7 @@
 
 bool Title::Start()
 {
-	m_spriteRender.Init("Assets/sprite/Title.DDS", 1920.0f, 1080.0f);
+	m_spriteRender.Init("Assets/sprite/Title.dds", 1920.0f, 1080.0f);
 
 	return true;
 }
