@@ -5,6 +5,7 @@
 
 bool GameOver::Start()
 {
+	// 初期化
 	m_baseSprite.Init("Assets/sprite/GameOver.dds", 1920.0f, 1080.0f);
 
 	m_restartText.Init("Assets/modelData/UI/Restart.dds", 250.0f, 80.0f);
@@ -14,7 +15,6 @@ bool GameOver::Start()
 	m_menuText.SetPosition(Vector3(780.0f, -470.0f, 0.0f));
 
 	// 位置更新
-	m_baseSprite.Update();
 	m_restartText.Update();
 	m_menuText.Update();
 	return true;
@@ -80,7 +80,6 @@ void GameOver::UpdateVisuals()
 	}
 
 	// 大きさの更新
-	m_baseSprite.Update();
 	m_restartText.Update();
 	m_menuText.Update();
 }
