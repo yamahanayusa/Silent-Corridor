@@ -19,6 +19,8 @@ namespace nsK2EngineLow {
 		InitCopyMainRenderTargetToFrameBufferSprite();
 		m_postEffect.Init(m_mainRenderTarget);
 		m_sceneLight.Init();                       // ライト初期化
+		m_noiseCB.Init(sizeof(SNoiseBuffer), nullptr); // ノイズ用の定数バッファを初期化
+		m_noiseStrength = 1.0f;
 	}
 
 	void RenderingEngine::Update()
@@ -82,7 +84,13 @@ namespace nsK2EngineLow {
 		spriteInitData.m_width = g_graphicsEngine->GetFrameBufferWidth();
 		spriteInitData.m_height = g_graphicsEngine->GetFrameBufferHeight();
 
-		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+		m_noiseData.time = 0.0f;
+		m_noiseData.strength = 0.5f; // テスト用に強め
+
+		spriteInitData.m_expandConstantBuffer = &m_noiseData;
+		spriteInitData.m_expandConstantBufferSize = sizeof(SNoiseBuffer);
+
+		spriteInitData.m_fxFilePath = "Assets/shader/noise.fx";
 		spriteInitData.m_psEntryPoinFunc = "PSMain";
 		spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 
@@ -105,8 +113,8 @@ namespace nsK2EngineLow {
 		viewport.Height = static_cast<FLOAT>(g_graphicsEngine->GetFrameBufferHeight());
 		viewport.MinDepth = 0.0f;
 		viewport.MaxDepth = 1.0f;
-
 		rc.SetViewportAndScissor(viewport);
+
 		m_copyMainRtToFrameBufferSprite.Draw(rc);
 
 		EndGPUEvent();
@@ -124,7 +132,18 @@ namespace nsK2EngineLow {
 
 		m_postEffect.Render(rc, m_mainRenderTarget);
 		Render2D(rc);
+		// ここまでで「背景＋文字」が m_mainRenderTarget に描き込まれている
+
+		// ノイズのデータを更新して送る
+		m_noiseData.time += 0.016f;
+
+		// スプライト自身が管理している拡張バッファを更新する
+		// これにより、Draw()を呼んだ時に自動的に register(b1) に送られます
+		m_copyMainRtToFrameBufferSprite.GetExpandConstantBufferGPU().CopyToVRAM(&m_noiseData);
+
+		// 最後にノイズシェーダーを通して画面完成
 		CopyMainRenderTargetToFrameBufferSprite(rc);
+
 		m_registerModels.clear();
 		m_2DObjects.clear();
 		m_FontObjects.clear();

@@ -78,7 +78,21 @@ namespace nsK2EngineLow {
 		/// <param name="rc"></param>
 		void Render2D(RenderContext& rc);
 
+		void SetNoiseStrength(float strength) {
+			m_noiseStrength = strength;
+		}
+
 	private:
+		struct SNoiseBuffer {
+			float time;
+			float strength;
+			float pad[2];
+		}m_noiseData;
+
+		ConstantBuffer	m_noiseCB;							// GPUに送るための箱
+		float			m_noiseTime = 0.0f;					// 毎フレーム増える時間
+		float			m_noiseStrength = 0.0f;				// ノイズの強さ
+
 		Sprite			m_copyMainRtToFrameBufferSprite;	// メインRTをフレームバッファにコピーするスプライト
 		SceneLight		m_sceneLight;						// シーンライト
 		RenderTarget	m_mainRenderTarget;					// メインレンダーターゲット
@@ -93,4 +107,3 @@ namespace nsK2EngineLow {
 		std::vector<FontRender*>	m_FontObjects;			// テキスト登録用配列
 	};
 }
-
