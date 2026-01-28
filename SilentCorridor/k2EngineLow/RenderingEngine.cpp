@@ -20,7 +20,7 @@ namespace nsK2EngineLow {
 		m_postEffect.Init(m_mainRenderTarget);
 		m_sceneLight.Init();                       // ライト初期化
 		m_noiseCB.Init(sizeof(SNoiseBuffer), nullptr); // ノイズ用の定数バッファを初期化
-		m_noiseStrength = 1.0f;
+		m_noiseStrength = 0.0f;
 	}
 
 	void RenderingEngine::Update()
@@ -85,7 +85,7 @@ namespace nsK2EngineLow {
 		spriteInitData.m_height = g_graphicsEngine->GetFrameBufferHeight();
 
 		m_noiseData.time = 0.0f;
-		m_noiseData.strength = 0.5f; // テスト用に強め
+		m_noiseData.strength = 0.0f;
 
 		spriteInitData.m_expandConstantBuffer = &m_noiseData;
 		spriteInitData.m_expandConstantBufferSize = sizeof(SNoiseBuffer);
@@ -136,6 +136,7 @@ namespace nsK2EngineLow {
 
 		// ノイズのデータを更新して送る
 		m_noiseData.time += 0.016f;
+		m_noiseData.strength = m_noiseStrength;
 
 		// スプライト自身が管理している拡張バッファを更新する
 		// これにより、Draw()を呼んだ時に自動的に register(b1) に送られます

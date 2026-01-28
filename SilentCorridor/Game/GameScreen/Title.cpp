@@ -1,6 +1,12 @@
 #include "stdafx.h"
+#include "RenderingEngine.h"
 #include "Title.h"
 #include "Game.h"
+#include "Loading.h"
+
+namespace {
+	static constexpr float NOISE_STRENGTH_STRONG = 0.7f;
+}
 
 bool Title::Start()
 {
@@ -86,7 +92,9 @@ void Title::CheckConfirmation()
 {
 	if (g_pad[0]->IsTrigger(enButtonA)) {
 		if (m_selectIndex == 0) {
-			NewGO<Game>(0, "game");
+			// ’Êí‚æ‚è‚à‹­‚¢ƒmƒCƒY‚ÌÝ’è
+			g_renderingEngine->SetNoiseStrength(NOISE_STRENGTH_STRONG);
+			NewGO<Loading>(0, "loading");
 			DeleteGO(this);
 		}
 		else if (m_selectIndex == 1) {

@@ -51,6 +51,7 @@
     <ClCompile Include="Character\MarkerLight.cpp" />
     <ClCompile Include="UI\UITimer.cpp" />
     <ClCompile Include="GameScreen\GameOver.cpp" />
+    <ClCompile Include="GameScreen\Loading.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Character\MarkerLight.h" />
     <ClInclude Include="UI\UITimer.h" />
     <ClInclude Include="GameScreen\GameOver.h" />
+    <ClInclude Include="GameScreen\Loading.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
