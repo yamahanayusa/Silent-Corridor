@@ -78,6 +78,10 @@ namespace nsK2EngineLow {
 		/// <param name="rc"></param>
 		void Render2D(RenderContext& rc);
 
+		/// <summary>
+		/// ƒmƒCƒY‚Ì‹­‚³‚ğŒˆ‚ß‚é
+		/// </summary>
+		/// <param name="strength"></param>
 		void SetNoiseStrength(float strength) {
 			m_noiseStrength = strength;
 		}
