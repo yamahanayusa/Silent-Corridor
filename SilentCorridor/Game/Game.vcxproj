@@ -229,6 +229,7 @@
     <ClCompile Include="GameScreen\Title.cpp" />
     <ClCompile Include="Character\MarkerLight.cpp" />
     <ClCompile Include="GameScreen\Loading.cpp" />
+    <ClCompile Include="Item\ItemManager.cpp" />
     <ClCompile Include="UI\UITimer.cpp" />
     <ClCompile Include="UI\IInventoryProvider.cpp" />
     <ClCompile Include="UI\ItemSlot.cpp" />
@@ -253,10 +254,12 @@
   <ItemGroup>
     <ClInclude Include="Character\Character.h" />
     <ClInclude Include="Character\Enemy.h" />
+    <ClInclude Include="Character\Player.h" />
     <ClInclude Include="GameScreen\GameOver.h" />
     <ClInclude Include="GameScreen\Title.h" />
     <ClInclude Include="Character\MarkerLight.h" />
     <ClInclude Include="GameScreen\Loading.h" />
+    <ClInclude Include="Item\ItemManager.h" />
     <ClInclude Include="UI\UITimer.h" />
     <ClInclude Include="UI\IInventoryProvider.h" />
     <ClInclude Include="UI\ItemSlot.h" />
@@ -267,7 +270,7 @@
     <ClInclude Include="Character\Inventory.h" />
     <ClInclude Include="Item\Item.h" />
     <ClInclude Include="Item\IItem.h" />
-    <ClInclude Include="Character\Player.h" />
+    <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Item\KeyItem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stage.h" />

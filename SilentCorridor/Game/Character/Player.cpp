@@ -3,14 +3,14 @@
 #include "Character/Inventory.h"
 #include "Item/FlashTrigger.h"
 #include "UI/ItemSlot.h"
-#include "Item/FlashBattery.h"
 #include "UI/UIHUDElements.h"
+#include "Item/Item.h"
 
 namespace
 {
     static constexpr float MOVE_FORCE = 2000.0f; // 左スティック入力による移動
     static constexpr float INITIAL_LIGHT_HEIGHT = 50.0f; // ライトの初期位置の高さ
-    static constexpr float COLLECT_RANGE = 500.0f; // 取得可能な最大距離
+    static constexpr float COLLECT_RANGE = 800.0f; // 取得可能な最大距離
     static constexpr float COLLECT_FOV_DEGREE = 60.0f; // 取得に必要な視野角
 }
 
@@ -117,27 +117,21 @@ void Player::HandleInput()
 
 void Player::HandleItemInput()
 {
-    if (g_pad[0]->IsTrigger(enButtonA))
-    {
-        // 現在使用されているアイテムIDを取得
-        int selectedID = GetSelectedItemID();
+    // ボタンが押されていなければ終了
+    if (!g_pad[0]->IsTrigger(enButtonA)) return;
 
-        // フラッシュカメラの使用処理
-        if (selectedID == ItemID::FLASH_CAMERA) {
-            // FlashTriggerコンポーネントにフラッシュ処理の実行を依頼する
-            if (m_flashTrigger) {
-                bool success = m_flashTrigger->TryUseFlash();
+    // 選択中アイテムがフラッシュでなければ終了
+    if (GetSelectedItemID() != ItemID::FLASH_CAMERA) return;
 
-                // 処理結果に応じてSEやUIフィードバックを行う
-                if (success) {
+    // 電池がなければ終了
+    if (m_inventory->GetFlashCount() <= 0) {
+        K2_LOG("電池がありません！");
+        return;
+    }
 
-                }
-                else {
-
-                }
-            }
-        }
-    
+    // メインの処理
+    if (m_flashTrigger) {
+        m_flashTrigger->TryUseFlash();
     }
 }
 
@@ -174,10 +168,10 @@ void Player::HandleCollectionMessage()
 {
     if (m_uiHUDElements == nullptr) return;
 
-    // 取得可能範囲内の最も近いFlashBatteryを検索
-    FlashBattery* battery = FindNearestCollectableItem(COLLECT_RANGE);
+    // 取得可能範囲内の最も近いItemを検索
+    Item* item = FindNearestCollectableItem(COLLECT_RANGE);
 
-    if (battery != nullptr)
+    if (item != nullptr)
     {
         // 取得可能なアイテムが見つかった場合、メッセージを表示
         m_uiHUDElements->SetCollectMessageVisible(true);
@@ -194,68 +188,51 @@ void Player::HandleItemCollection()
     // 取得キーが押されたかチェック
     if (g_pad[0]->IsTrigger(enButtonB))
     {
-        // 取得可能範囲内の最も近いFlashBatteryを検索
-        FlashBattery* battery = FindNearestCollectableItem(COLLECT_RANGE);
-
-        if (battery != nullptr)
-        {
-            // 取得処理を実行
-            if (battery->OnCollect(this))
-            {
-                // 取得に成功した場合、ゲームワールドからオブジェクトを削除するよう予約
-                DeleteGO(battery);
-                K2_LOG("FlashBattery collected and removed from world.");
-            }
+        Item* item = FindNearestCollectableItem(COLLECT_RANGE);
+        if (item != nullptr) {
+            item->Collect(this);
         }
     }
 }
 
-FlashBattery* Player::FindNearestCollectableItem(float range)
+Item* Player::FindNearestCollectableItem(float range)
 {
     Vector3 playerPos = GetPosition();
+    playerPos.y = 0.0f;
     float nearestDistSq = range * range;
-    FlashBattery* nearestBattery = nullptr;
+    Item* nearestItem = nullptr;
 
-    // プレイヤーの前方ベクトルを取得（Y軸成分は0にして水平方向に限定）
     Vector3 playerForward = GetForwardVector();
+    playerForward.y = 0.0f; // 水平方向に限定
+    //playerForward.Normalize();
 
-    // 視野角の閾値（度をラジアンに変換してコサインを取得）
     constexpr float HALF_FOV_RAD = Math::DegToRad(COLLECT_FOV_DEGREE / 2.0f);
     const float COS_FOV_THRESHOLD = Math::Cos(HALF_FOV_RAD);
 
-    // シーン内のすべての FlashBattery を検索
-    // GameObjectManager::FindAll<T>() がテンプレートとして実装されている前提
-    std::vector<FlashBattery*> batteries = GameObjectManager::GetInstance()->FindAll<FlashBattery>();
+    // FindAll は vector を返すので auto または std::vector<Item*> で受ける
+    auto items = GameObjectManager::GetInstance()->FindAll<Item>();
 
-    for (FlashBattery* battery : batteries)
-    {
-        if (battery == nullptr) continue;
+    for (Item* item : items) {
+        if (item == nullptr) continue;
 
-        Vector3 itemPos = battery->GetPosition();
-
-        // ---距離判定--- 
+        // アイテムとの距離と角度を判定するロジックを追加
+        Vector3 itemPos = item->GetPosition();
+        itemPos.y = 0.0f;
         Vector3 playerToItem = itemPos - playerPos;
         float distSq = playerToItem.LengthSq();
 
-        if (distSq > nearestDistSq) continue; // 範囲外なら次へ
+        // 距離チェック
+        if (distSq > nearestDistSq) continue;
 
-        // ---視野角判定---
-        Vector3 directionToItem = playerToItem;
-        directionToItem.Normalize();
+        // 視野角チェック
+        playerToItem.Normalize();
+        float dotProduct = playerForward.Dot(playerToItem);
 
-        // プレイヤーの前方ベクトルとアイテム方向ベクトルの内積を計算
-        float dotProduct = playerForward.Dot(directionToItem);
-
-        // 内積が閾値以上であれば、アイテムは視野角内にある
-        if (dotProduct >= COS_FOV_THRESHOLD)
-        {
-            // 距離と視野角の両方をクリア。最も近いアイテムを更新
-            if (distSq < nearestDistSq) {
-                nearestDistSq = distSq;
-                nearestBattery = battery;
-            }
+        if (dotProduct >= COS_FOV_THRESHOLD) {
+            // 最も近いものを更新
+            nearestDistSq = distSq;
+            nearestItem = item;
         }
     }
-
-    return nearestBattery;
+    return nearestItem;
 }

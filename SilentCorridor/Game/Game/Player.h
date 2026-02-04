@@ -6,7 +6,6 @@
 class FlashTrigger;
 class FlashBattery;
 class UIHUDElements;
-class Item;
 
 class Player : public Character, public IInventoryProvider
 {
@@ -53,7 +52,7 @@ private:
     void HandleItemCollection(); // アイテム取得処理
     void HandleCollectionMessage(); // アイテム取得メッセージ表示処理
     
-    Item* FindNearestCollectableItem(float range); // 近くの取得可能アイテムの検索
+    FlashBattery* FindNearestCollectableItem(float range); // 近くの取得可能アイテムの検索
 
 public:
     Vector3	m_forward = Vector3::AxisZ; //ライト用

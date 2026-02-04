@@ -7,10 +7,10 @@
 namespace {
 	static constexpr float NOISE_STRENGTH_DEFAULT = 0.0f; // ノイズの強さ
 	static constexpr float WAIT_TIME = 8.0f; // ロード画面の表示時間
-	static constexpr float JUMP_SPEED = 12.0f; // 跳ねる速さ
-	static constexpr float JUMP_HEIGHT = 25.0f; // 跳ねる高さ
-	static constexpr float FONT_INTERVAL = 90.0f; // 文字の間隔
-	static constexpr float START_X = -540.0f; // 最初の文字のX座標
+	static constexpr float JUMP_SPEED = 10.0f; // 跳ねる速さ
+	static constexpr float JUMP_HEIGHT = 30.0f; // 跳ねる高さ
+	static constexpr float FONT_INTERVAL = 60.0f; // 文字の間隔
+	static constexpr float START_X = 150.0f; // 最初の文字のX座標
 }
 
 bool Loading::Start()
@@ -25,7 +25,7 @@ bool Loading::Start()
 		m_fonts[i].Init(path.c_str(), 100.0f, 100.0f);
 
 		// 基準の位置
-		m_basePosition[i] = { START_X + (i * FONT_INTERVAL), -400.0f,0.0f };
+		m_basePosition[i] = { START_X + (i * FONT_INTERVAL), -470.0f,0.0f };
 		m_fonts[i].SetPosition(m_basePosition[i]);
 
 		m_fonts[i].Update();
@@ -76,7 +76,7 @@ void Loading::UpdateUI()
 {
 	for (int i = 0;i < FONT_COUNT;i++) {
 		// 文字ごとにタイミングをずらすことでウェーブにする
-		float offset = i * 0.2f;
+		float offset = i * 0.3f;
 		// sin波を使ってジャンプ量を計算する
 		// 今回はfloatなので、fabs()を使用
 		float jump = fabs(sin(m_totalTime * JUMP_SPEED - offset)) * JUMP_HEIGHT;
