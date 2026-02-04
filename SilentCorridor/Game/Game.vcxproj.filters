@@ -52,6 +52,7 @@
     <ClCompile Include="UI\UITimer.cpp" />
     <ClCompile Include="GameScreen\GameOver.cpp" />
     <ClCompile Include="GameScreen\Loading.cpp" />
+    <ClCompile Include="Item\ItemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -71,7 +72,7 @@
     <ClInclude Include="Character\Enemy.h">
       <Filter>Character</Filter>
     </ClInclude>
-    <ClInclude Include="Character\Player.h">
+    <ClInclude Include="Game\Player.h">
       <Filter>Character</Filter>
     </ClInclude>
     <ClInclude Include="Item\KeyItem.h">
@@ -97,6 +98,8 @@
     <ClInclude Include="UI\UITimer.h" />
     <ClInclude Include="GameScreen\GameOver.h" />
     <ClInclude Include="GameScreen\Loading.h" />
+    <ClInclude Include="Item\ItemManager.h" />
+    <ClInclude Include="Character\Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

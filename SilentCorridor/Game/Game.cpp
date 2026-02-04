@@ -6,9 +6,9 @@
 #include "Character/Enemy.h"
 #include "Character/MarkerLight.h"
 #include "UI/UIHUDElements.h"
-#include "Item/FlashBattery.h"
 #include "UI/UITimer.h"
 #include "GameScreen/GameOver.h"
+#include "Item/ItemManager.h"
 
 Game::~Game()
 {
@@ -19,9 +19,9 @@ Game::~Game()
 	if (m_enemy2) DeleteGO(m_enemy2);
 	if (m_uiSlot) DeleteGO(m_uiSlot);
 	if (m_uiTimer) DeleteGO(m_uiTimer);
-	if (m_flashBattery) DeleteGO(m_flashBattery);
 	if (m_markerLight1) DeleteGO(m_markerLight1);
 	if (m_markerLight2) DeleteGO(m_markerLight2);
+	if (m_itemManager) DeleteGO(m_itemManager);
 }
 
 bool Game::Start()
@@ -31,7 +31,9 @@ bool Game::Start()
 
 	m_player = NewGO<Player>(0, "player");
 	m_stage = NewGO<Stage>(0, "stage");
-	m_gameCamera = NewGO<GameCamera>(0, "gamecamera");
+	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
+	m_uiTimer = NewGO<UITimer>(0, "uiTimer");
+	m_itemManager = NewGO<ItemManager>(0, "itemManager");
 
 	m_enemy1 = NewGO<Enemy>(0, "enemy1");
 	m_markerLight1 = NewGO<MarkerLight>(0, "markerLight1");
@@ -44,9 +46,6 @@ bool Game::Start()
 	m_uiSlot = NewGO<UIHUDElements>(0, "uislot");
 	m_uiSlot->RenderInit();
 	m_uiSlot->SetInventoryProvider(m_player);
-	m_flashBattery = NewGO< FlashBattery>(0, "flashBattery");
-	m_uiTimer = NewGO<UITimer>(0, "uiTimer");
-
 
 	if (m_player) {
 		m_player->SetUIHUDElements(m_uiSlot);

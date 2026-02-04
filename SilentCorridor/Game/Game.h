@@ -6,9 +6,9 @@ class GameCamera;
 class Enemy;
 class MarkerLight;
 class UIHUDElements;
-class FlashBattery;
 class UITimer;
 class GameOver;
+class ItemManager;
 
 class Game : public IGameObject
 {
@@ -31,9 +31,9 @@ private:
 	MarkerLight* m_markerLight1 = nullptr;
 	MarkerLight* m_markerLight2= nullptr;
 	UIHUDElements* m_uiSlot = nullptr;
-	FlashBattery* m_flashBattery = nullptr;
 	UITimer* m_uiTimer = nullptr;
 	GameOver* m_gameOver = nullptr;
+	ItemManager* m_itemManager = nullptr;
 
 	ModelRender m_modelRender;
 };
