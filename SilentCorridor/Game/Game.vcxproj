@@ -230,6 +230,7 @@
     <ClCompile Include="Character\MarkerLight.cpp" />
     <ClCompile Include="GameScreen\Loading.cpp" />
     <ClCompile Include="Item\ItemManager.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="UI\UITimer.cpp" />
     <ClCompile Include="UI\IInventoryProvider.cpp" />
     <ClCompile Include="UI\ItemSlot.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="Character\MarkerLight.h" />
     <ClInclude Include="GameScreen\Loading.h" />
     <ClInclude Include="Item\ItemManager.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="UI\UITimer.h" />
     <ClInclude Include="UI\IInventoryProvider.h" />
     <ClInclude Include="UI\ItemSlot.h" />

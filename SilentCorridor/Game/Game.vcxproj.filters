@@ -53,6 +53,7 @@
     <ClCompile Include="GameScreen\GameOver.cpp" />
     <ClCompile Include="GameScreen\Loading.cpp" />
     <ClCompile Include="Item\ItemManager.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="GameScreen\Loading.h" />
     <ClInclude Include="Item\ItemManager.h" />
     <ClInclude Include="Character\Player.h" />
+    <ClInclude Include="SoundManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
