@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "GameScreen/GameOver.h"
 #include "Game.h"
+#include "SoundManager.h"
 
 namespace {
     const float DETECTION_RANGE = 2000.0f; // プレイヤー発見距離
@@ -129,6 +130,9 @@ void Enemy::Update()
         if (IsPlayerInRange(DETECTION_RANGE)) {
             m_logicState = enEnemyState_Chase; // 追跡状態へ
             m_speed = CHASE_SPEED;
+
+            // 敵がプレイヤーを見つけた時の叫び声
+            SoundManager::GetInstance()->PlaySE2D(3);
         }
     }
 
@@ -260,6 +264,16 @@ void Enemy::UpdateMove()
 
 void Enemy::UpdateChase()
 {
+    // 追跡音
+    if (m_chaseVoice == nullptr) {
+        m_chaseVoice = SoundManager::GetInstance()->PlaySE3D(2, GetPosition(), true);
+    }
+
+    // 音の場所を今の敵の位置に更新
+    if (m_chaseVoice) {
+        m_chaseVoice->SetPosition(GetPosition());
+    }
+
     const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
     // 追跡中はスピードを上げる
@@ -300,6 +314,11 @@ void Enemy::UpdateChase()
 
     // m_lostDuration 秒経過したら徘徊に戻る
     if (m_lostTimer <= 0.0f) {
+        // 追跡が終わったら音を止める
+        if (m_chaseVoice) {
+            DeleteGO(m_chaseVoice);
+            m_chaseVoice = nullptr;
+        }
         m_logicState = enEnemyState_Walk; // 徘徊状態へ遷移
         m_speed = WALK_SPEED;
         FindNextPatrolTarget(); // 次のウェイポイントを探す
@@ -366,11 +385,16 @@ void Enemy::FindNextPatrolTarget()
 /// <param name="duration"></param>
 void Enemy::SetStun(float duration)
 {
+    // スタン中は音を消す
+    if (m_chaseVoice) {
+        DeleteGO(m_chaseVoice);
+        m_chaseVoice = nullptr;
+    }
     // スタン時間の設定、ステートをスタンに遷移
     m_stunTimer = duration;
     m_logicState = enEnemyState_Stun;
 
-    // スタン状態は移動速度を０にする
+    // スタン状態は移動速度を0にする
     SetMoveSpeed(Vector3::Zero);
     m_isMoving = false;
 

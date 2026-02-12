@@ -23,6 +23,7 @@ enum EnemyState
 
 class Stage;
 class Player;
+
 class Enemy : public Character
 {
 public:
@@ -52,6 +53,7 @@ private:
     nsAI::Path m_path; // 経路データ
     Stage* m_stage = nullptr;
     Player* m_player = nullptr;
+    SoundSource* m_chaseVoice = nullptr;
 
     std::vector<Vector3>m_patrolPoints; // 徘徊ポイントリスト
     Vector3 m_targetPos = Vector3::Zero; // 移動目標

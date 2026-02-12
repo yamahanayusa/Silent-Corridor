@@ -9,6 +9,7 @@
 #include "UI/UITimer.h"
 #include "GameScreen/GameOver.h"
 #include "Item/ItemManager.h"
+#include "SoundManager.h"
 
 Game::~Game()
 {
@@ -29,6 +30,7 @@ bool Game::Start()
 	// “–‚½‚è”»’è‚Ì‰ÂŽ‹‰»
 	// PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
+	SoundManager* soundManager = NewGO<SoundManager>(0, "soundManager");
 	m_player = NewGO<Player>(0, "player");
 	m_stage = NewGO<Stage>(0, "stage");
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
